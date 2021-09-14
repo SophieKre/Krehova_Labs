@@ -2,12 +2,32 @@
 //
 
 #include <iostream> 
+#include <string>
+using namespace std;
 
 struct Pipe {
 	int id;
 	int d;
+	int length;// length of pipe
 };
+struct Compressor {
+	int id, tseh,tsehInWork;
+	float effect; //koef of effectiveness
+	string name;
 
+};
+void PrintPipe(Pipe& p)
+{
+	std::cout << " Id of pipe is " << p.id << ". Diametr of pipe is  " << p.d << " mm.";
+}
+Pipe CreatePipe() {
+	Pipe p;
+	p.id = 0;
+	std::cout<< "User, enter diametr";
+	std::cin >> p.d;
+	return p;
+
+ }
 int main()
 {
 	Pipe p;// = { 0,1420 };
@@ -15,7 +35,9 @@ int main()
 	std::cout << "User, enter diametr  ";
 	std::cin >> p.d;
 	p.id = 0;
-	std::cout << " Id of pipe " <<p.id<<". Diametr of pipe is  "<<p.d<<" mm";
+	PrintPipe(p);
+	Compressor c;
+	c.id = 0;
 
 }
 
