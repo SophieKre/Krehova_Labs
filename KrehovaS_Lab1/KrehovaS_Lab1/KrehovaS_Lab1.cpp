@@ -2,13 +2,16 @@
 //
 
 #include <iostream> 
+#include <conio.h>
 #include <string>
+
 using namespace std;
 
 struct Pipe {
 	int id;
 	int d;
 	int length;// length of pipe
+    string priznak ;
 };
 struct Compressor {
 	int id, tseh,tsehInWork;
@@ -16,28 +19,49 @@ struct Compressor {
 	string name;
 
 };
-void PrintPipe(Pipe& p)
+
+	void PrintPipe(Pipe & p)
 {
-	std::cout << " Id of pipe is " << p.id << ". Diametr of pipe is  " << p.d << " mm.";
+	cout << " Id of pipe is " << p.id << ". Diametr of pipe is  " << p.d << " mm."<<endl;
 }
-Pipe CreatePipe() {
+   Pipe CreatePipe() {
 	Pipe p;
 	p.id = 0;
-	std::cout<< "User, enter diametr";
+	std::cout<< "User, enter diametr"<<endl;
 	std::cin >> p.d;
 	return p;
-
+	
  }
+void print_menu() {
+	system("cls"); // очищаем экран
+	cout << "What do you want to do?" << endl;
+	cout << "1. Add pipe" << endl;
+	cout << "2. Add comprassor" << endl;
+	cout << "3. Edit pipe" << endl;
+	cout << "4. Edit comprassor" << endl;
+	cout << "5. Save to file" << endl;
+	cout << "6. Load from file" << endl;
+	cout << "7. Exit" << endl;
+	cout << ">";
+}
+void ErrorInlength(Pipe& p)
+{
+	if (p.length < 1 || p.length >= 100)
+		cout << "The value of pipe is impossible. Please, try again";
+}
+
 int main()
 {
-	Pipe p;// = { 0,1420 };
-	p.id = 0;
-	std::cout << "User, enter diametr  ";
-	std::cin >> p.d;
-	p.id = 0;
+	print_menu();
+	//Pipe p;// = { 0,1420 };
+	//p.id = 0;
+	Pipe p=CreatePipe();
+	
 	PrintPipe(p);
-	Compressor c;
-	c.id = 0;
+	std::cout << "Please enter the length of pipe ";
+	std::cin >> p.length;
+	ErrorInlength(p);
+	p.priznak = "New";
 
 }
 
