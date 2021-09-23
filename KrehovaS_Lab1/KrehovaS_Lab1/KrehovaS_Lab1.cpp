@@ -14,7 +14,8 @@ struct Pipe {
     string priznak ;
 };
 struct Compressor {
-	int id, tseh,tsehInWork;
+	int id, tseh;
+		float tsehInWork;
 	float effect; //koef of effectiveness
 	string name;
 
@@ -32,6 +33,20 @@ struct Compressor {
 	return p;
 	
  }
+   void PrintComprssor(Compressor & c) {
+	   cout << " Id of Comprassor Station is " << c.id << "The name of Comprassor Station is " << c.name << "An amount of shops is " << c.tseh << "All shops that work is" << c.tsehInWork<<endl;
+   }
+   Compressor CreateCompressor(){
+	   Compressor c;
+	   cout << "User, enter a name of Comressor Station" << endl;
+	   cin >> c.name;
+	   c.id = 0;
+	   c.tseh = 12;
+	   c.tsehInWork = 10;
+	   c.effect = (c.tsehInWork / (c.tseh - c.tsehInWork)) * 100;
+	   return c;
+   }
+
 void print_menu() {
 	system("cls"); // очищаем экран
 	cout << "What do you want to do?" << endl;
@@ -44,26 +59,76 @@ void print_menu() {
 	cout << "7. Exit" << endl;
 	cout << ">";
 }
+
 void ErrorInlength(Pipe& p)
 {
 	if (p.length < 1 || p.length >= 100)
 		cout << "The value of pipe is impossible. Please, try again";
 }
+int get_variant(int count) {
+	int variant;
+	string s; // строка для считывания введённых данных
+	getline(cin, s); // считываем строку
 
+	// пока ввод некорректен, сообщаем об этом и просим повторить его
+	while (sscanf_s(s.c_str(), "%d", &variant) != 1 || variant < 1 || variant > count) {
+		cout << "Incorrect input. Try again: "; // выводим сообщение об ошибке
+		getline(cin, s); // считываем строку повторно
+	}
+
+	return variant;
+}
 int main()
 {
-	print_menu();
+	Pipe p;
+	Compressor c;
+	int variant; // выбранный пункт меню
+	do {
+		print_menu();
+		variant = get_variant(7);
+		switch (variant) {
+		case 1:
+			 p = CreatePipe();
+			PrintPipe(p);
+			break;
+		case 2:
+			c = CreateCompressor();
+			PrintComprssor(c);
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+
+		}
+		if (variant != 7)
+			system("pause");
+		
+	} while (variant != 7);
+	return 0;
+
+
+	}
+	
+	
+	
+	
+	
 	//Pipe p;// = { 0,1420 };
 	//p.id = 0;
-	Pipe p=CreatePipe();
+	//Pipe p=CreatePipe();
 	
-	PrintPipe(p);
-	std::cout << "Please enter the length of pipe ";
-	std::cin >> p.length;
-	ErrorInlength(p);
-	p.priznak = "New";
+//	PrintPipe(p);
+	//std::cout << "Please enter the length of pipe ";
+	//std::cin >> p.length;
+	//ErrorInlength(p);
+	//p.priznak = "New";
 
-}
+
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
 // Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
