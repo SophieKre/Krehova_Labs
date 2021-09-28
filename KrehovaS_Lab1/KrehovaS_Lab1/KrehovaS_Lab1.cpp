@@ -1,10 +1,10 @@
-﻿// KrehovaS_Lab1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
+﻿
 #include <iostream> 
 #include <conio.h>
 #include <string>
-
+#include <ctime> // Для рандома
+#include <vector>
+#include <fstream>// for saving and loading
 using namespace std;
 
 struct Pipe {
@@ -20,33 +20,97 @@ struct Compressor {
 	string name;
 
 };
+int RandomInt(int left, int right)
+{
+	srand(time(NULL));
+	return left + (rand() % (right - left) + 1);
+}
+
 
 	void PrintPipe(Pipe & p)
 {
 	cout << " Id of pipe is " << p.id << ". Diametr of pipe is  " << p.d << " mm."<<endl;
 }
+	void ErrorInlength(Pipe& p)
+	{
+		if (p.length < 1 || p.length >= 100)
+			cout << "The value of pipe is impossible. Please, try again";
+	}
+	void EditPipe(Pipe &p) {
+		int d2;
+		cout << "Enter a new dimetr of pipe" << endl;
+		cin >> p.d;
+		d2 == p.d;
+
+	}
+
    Pipe CreatePipe() {
 	Pipe p;
-	p.id = 0;
-	std::cout<< "User, enter diametr"<<endl;
-	std::cin >> p.d;
+	p.id = RandomInt(789,8000);
+	cout<< "User, enter diametr"<<endl;
+	cin >> p.d;
+	cout << "User, enter yhe length of pipe" << endl;
+	cin >> p.length;
+	ErrorInlength(p);
 	return p;
 	
  }
+
    void PrintComprssor(Compressor & c) {
-	   cout << " Id of Comprassor Station is " << c.id << "The name of Comprassor Station is " << c.name << "An amount of shops is " << c.tseh << "All shops that work is" << c.tsehInWork<<endl;
+	   cout << " Id of Comprassor Station is " << c.id << endl;
+	    cout<< "The name of Comprassor Station is " << c.name << endl;
+	   cout << "An amount of shops is  " << c.tseh << endl;
+	   cout<<"All shops that work is " << c.tsehInWork << endl;
    }
    Compressor CreateCompressor(){
 	   Compressor c;
 	   cout << "User, enter a name of Comressor Station" << endl;
 	   cin >> c.name;
-	   c.id = 0;
+	   c.id = RandomInt(800,8900);
 	   c.tseh = 12;
 	   c.tsehInWork = 10;
 	   c.effect = (c.tsehInWork / (c.tseh - c.tsehInWork)) * 100;
 	   return c;
    }
+   void SavePipe(const Pipe& p) {
+	   ofstream fout;
+	   fout.open("data.txt", 'w');
+	   fout << " \tId of pipe is " << p.id 
+		   << ". \tDiametr of pipe is  " << p.d 
+		   << " \tmm." << endl;
+   }
+   void SaveComprassor(const Compressor& c) {
+	   ofstream fout;
+	   fout.open("data1.txt", 'w');
+	   fout << " Id of Comprassor Station is " << c.id  
+	    << "The name of Comprassor Station is " << c.name 
+	    << "An amount of shops is  " << c.tseh  
+	    << "All shops that work is " << c.tsehInWork << endl;
 
+   }
+
+   Pipe LoadPipe() {
+	   ifstream fin;
+	   fin.open("data.txt", 'r');
+	   Pipe p;
+	   cout << "User, enter diametr" << endl;
+	   fin >> p.d;
+	   cout << "User, enter yhe length of pipe" << endl;
+	   fin >> p.length;
+	   return p;
+   }
+   Compressor LoadComprassor() {
+	   ifstream fin;
+	   fin.open("data1.txt", 'r');
+	   Compressor c;
+	   cout << "User, enter a name of Comressor Station" << endl;
+	   fin >> c.name;
+	   c.id = RandomInt(800, 8900);
+	   c.tseh = 12;
+	   c.tsehInWork = 10;
+	   c.effect = (c.tsehInWork / (c.tseh - c.tsehInWork)) * 100;
+	   return c;
+   }
 void print_menu() {
 	system("cls"); // очищаем экран
 	cout << "What do you want to do?" << endl;
@@ -60,11 +124,7 @@ void print_menu() {
 	cout << ">";
 }
 
-void ErrorInlength(Pipe& p)
-{
-	if (p.length < 1 || p.length >= 100)
-		cout << "The value of pipe is impossible. Please, try again";
-}
+
 int get_variant(int count) {
 	int variant;
 	string s; // строка для считывания введённых данных
@@ -80,6 +140,7 @@ int get_variant(int count) {
 }
 int main()
 {
+	
 	Pipe p;
 	Compressor c;
 	int variant; // выбранный пункт меню
@@ -88,6 +149,7 @@ int main()
 		variant = get_variant(7);
 		switch (variant) {
 		case 1:
+
 			 p = CreatePipe();
 			PrintPipe(p);
 			break;
@@ -96,11 +158,15 @@ int main()
 			PrintComprssor(c);
 			break;
 		case 3:
+			EditPipe(p);
+			PrintPipe(p);
 			break;
 		case 4:
 			break;
 		case 5:
+			SavePipe(p);
 			break;
+			LoadPipe();
 		case 6:
 			break;
 
