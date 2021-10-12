@@ -29,16 +29,17 @@ struct Compressor {
 
 	void PrintPipe(Pipe & p)
 {
-		cout << " Id of pipe is " << p.id << ". Diametr of pipe is  " << p.d << " mm." << endl
-			<< "The length of pipe is  " << p.length << endl;
+		cout << " Id of pipe is " << p.id << ". Diametr of pipe is  " << p.d << " mm." << endl;
+		
+		cout << "The length of pipe is  " << p.length << endl;
 
 
 }
-	void ErrorInlength(Pipe& p)
+	/*void ErrorInlength(Pipe& p)
 	{
 		if (p.length < 1 || p.length >= 100)
 			cout << "The value of pipe is impossible. Please, try again";
-	}
+	}*/
 	void EditPipe(Pipe &p) {
 		int d2;
 		cout << "Enter a new dimetr of pipe" << endl;
@@ -46,18 +47,29 @@ struct Compressor {
 		d2 == p.d;
 
 	}
+	void EditCompressor(Compressor& c)
+	{
+		int tsehinwork2;
+		cout << "Enter a new amount of working tseh" << endl;
+		cin >> c.tsehInWork;
+		tsehinwork2 == c.tsehInWork;
+	}
+	
 
    Pipe CreatePipe() {
 	Pipe p;
 	p.id = 0;
 	cout<< "User, enter diametr"<<endl;
 	cin >> p.d;
+
+
 	cout << "User, enter yhe length of pipe" << endl;
 	cin >> p.length;
-	ErrorInlength(p);
+	/*ErrorInlength(p);*/
 	return p;
 	
  }
+
 
    void PrintComprssor(Compressor & c) {
 	   cout << " Id of Comprassor Station is " << c.id << endl
@@ -74,48 +86,59 @@ struct Compressor {
 	   c.id = 0;
 	   cout << "How many tseh do you have ?  "<<endl;
 	   cin>>c.tseh ;
-	   cout << "Is any tseh is working ? " << endl;
+	   
+	   cout << "How many tseh is working ? " << endl;
 	   cin>>c.tsehInWork ;
-	   c.effect = (c.tsehInWork / (c.tseh - c.tsehInWork)) * 100;
+	  
+	   cout << "Enter efficiency " << endl;
+	   cin >> c.effect;
+	   
 	   return c;
    }
-   void SavePipe(const Pipe& p) {
+   void SavePipeandComp(const Pipe& p,const Compressor&c) {
 	   ofstream fout;
-	   fout.open("data.txt", 'w');
-	   fout << " \tId of pipe is " << p.id 
-		   << ". \tDiametr of pipe is  " << p.d 
-		   << " \tmm." << endl;
-   }
-   void SaveComprassor(const Compressor& c) {
-	   ofstream fout;
-	   fout.open("data.txt", 'w');
-	   fout << " Id of Comprassor Station is " << c.id  
-	    << "The name of Comprassor Station is " << c.name 
-	    << "An amount of shops is  " << c.tseh  
-	    << "All shops that work is " << c.tsehInWork << endl;
+	   fout.open("Data345.txt", ios_base::out);
+	   if (!fout.is_open()) // если файл небыл открыт
+	   {
+		   cout << "Файл не может быть открыт или создан\n"; // напечатать соответствующее сообщение
+		   exit;
+	   }
+	   fout << p.id << endl;
+	   fout << p.d << endl;
+		  fout << p.length<< endl;
+		  fout << c.id << endl;
+		  fout << c.name << endl;
+		  fout << c.tseh << endl;
+		  fout << c.tsehInWork << endl;
+		  fout << c.effect << endl;
+	   fout.close();
 
    }
+  
+   
 
    Pipe LoadPipe() {
 	   ifstream fin;
-	   fin.open("data.txt", 'r');
+	   fin.open("Data345.txt", ios_base::in);
 	   Pipe p;
-	   cout << "User, enter diametr" << endl;
+	   
+	   fin >> p.id;
 	   fin >> p.d;
-	   cout << "User, enter yhe length of pipe" << endl;
 	   fin >> p.length;
+	  
+	   fin.close();
 	   return p;
    }
    Compressor LoadComprassor() {
 	   ifstream fin;
 	   fin.open("data.txt", 'r');
 	   Compressor c;
-	   cout << "User, enter a name of Comressor Station" << endl;
+	   fin >> c.id;
 	   fin >> c.name;
-	   c.id = 0;
-	   c.tseh = 12;
-	   c.tsehInWork = 10;
-	   c.effect = (c.tsehInWork / (c.tseh - c.tsehInWork)) * 100;
+	   fin >> c.tseh;
+	   fin >> c.tsehInWork;
+	   fin >> c.effect;
+	   
 	   return c;
    }
 void print_menu() {
@@ -131,18 +154,8 @@ void print_menu() {
 	 << ">";
 }
 
-//int GetVariant(int min, int max)
-//{
-//	int x;
-//	do {
-//		cin.clear();
-//		cin.ignore(10000,'\n');
-//		cout << "Choose an action (" << min << "-" << max << "):";
-//		cin >> x;
-//	} while (cin.fail() || x < min || x>max);
-//	return x;
-//
-//}
+
+  
 
 int get_variant(int count) {
 	int variant;
@@ -170,6 +183,7 @@ int main()
 		case 1:
 
 			 p = CreatePipe();
+			
 			PrintPipe(p);
 			break;
 		case 2:
@@ -183,8 +197,8 @@ int main()
 		case 4:
 			break;
 		case 5:
-			SavePipe(p);
-			SaveComprassor(c);
+			SavePipeandComp(p,c);
+			
 			break;
 			
 		case 6:
