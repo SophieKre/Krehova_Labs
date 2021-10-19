@@ -156,7 +156,7 @@ struct Compressor {
 	   Compressor c;
 	   c.id = 0;
 	   cout << "User, enter a name of Comressor Station" << endl;
-	   cin.ignore(32767, '\n');
+	   /*cin.ignore(32767, '\n');*/
 	   getline(cin, c.name);
 	   
 	   cout << "How many tseh do you have ?  "<<endl;
@@ -164,7 +164,7 @@ struct Compressor {
 	   
 	   cout << "How many tseh is working ? " << endl;
 	   c.tsehInWork = rightenter();
-	   while ((c.tsehInWork < 1) || (c.tsehInWork > c.tseh)) {
+	   while ((c.tsehInWork < 0) || (c.tsehInWork > c.tseh)) {
 		   cout << "Error in enter, try again" << endl;
 		   c.tsehInWork = rightenter();
 	   }
@@ -176,64 +176,69 @@ struct Compressor {
    void SavePipeandComp(const Pipe& p, const Compressor& c) {
 	   ofstream fout;
 	   fout.open("Data345.txt", ios_base::out);
-	   if (!fout.is_open()) // если файл небыл открыт
+	   if (!fout.is_open()) // если файл не был открыт
 	   {
 		   cout << "Файл не может быть открыт или создан\n"; // напечатать соответствующее сообщение
 		   exit;
 	   }
-	   if (p.d != 0) {
+	   if (fout.good()) {
 		   if (p.d != 0) {
-			   fout << "Pipe:" << endl;
-			   fout << p.id << endl;
-			   fout << p.d << endl;
-			   fout << p.length << endl;
+			   fout << "Pipe:" << endl
+				   << p.id << endl
+				   << p.d << endl
+				   << p.length << endl;
+
 		   }
-		   else
-			   fout << "There are no data about pipe" << endl;
+		   
 		   if (c.tseh != 0) {
-			   fout << "Compression station:" << endl;
-			   fout << c.id << endl;
-			   fout << c.name << endl;
-			   fout << c.tseh << endl;
-			   fout << c.tsehInWork << endl;
-			   fout << c.effect << endl;
+			   fout << "Compression " << endl;
+			   fout << c.id << endl
+				   << c.name << endl
+				   << c.tseh << endl
+				   << c.tsehInWork << endl
+				   << c.effect << endl;
 		   }
-		   else
-			   fout << "There are no data about Compression Station" << endl;
+		   /*else*/
+			 // /* fout << "There are no data about Compression Station" << endl;*/
 
+	   //}
+		   fout.close();
+		   cout << "Saved";
 	   }
-
+	   else cout << "NO pipe or Comptrssor";
    }
 
    void LoadPipeandComp(Pipe &p,Compressor &c) {
 	   ifstream fin;
-	   string str;
+	 ;
 	   fin.open("Data345.txt", ios_base::in);
-	   getline(fin, str);
-	   if (str == "Pipe:") {
-		   getline(fin, str);
-		   p.id == stoi(str);
-		   getline(fin, str);
-		   p.d == stoi(str);
-		   getline(fin, str);
-		   p.length == stoi(str);
+	   if (fin.good()) {
+		   while (!fin.eof())
+		   {
+			   string str;
+			   fin >> str;
+			   if (str == "Pipe:") {
+				   fin >> p.id;
+				   fin >> p.d;
+				   fin >> p.length;
+				  
+			   }
+			   if (str == "Compression") {
+				   fin >> c.id;
+				   
+				   string(c.name);
+				   
+				   getline(fin, c.name);
+				   fin >> c.tseh;
+				   fin >> c.tsehInWork;
+				   fin >> c.effect;
+			   }
+		   }
+		   cout << "Loaded";
 	   }
-	   getline(fin, str);
-	   if (str == "Compression Station:") {
-		   getline(fin, str);
-		   c.id == stoi(str);
-		   getline(fin, str);
-		   c.name == str;
-		   getline(fin, str);
-		   c.tseh == stoi(str);
-		   getline(fin, str);
-		  c.tsehInWork == stoi(str);
-		  getline(fin, str);
-		  c.effect == stoi(str);
+	   
 
-	   }
-
-	  
+	   fin.close();
    }
    
 void print_menu() {
