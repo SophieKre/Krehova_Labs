@@ -20,7 +20,33 @@ struct Compressor {
 	string name;
 
 };
-
+int RandomInt(int left, int right)
+{
+	srand(time(NULL));
+	return left + (rand() % (right - left) + 1);
+}
+bool CheckingUniquenessID(const int& ID, const vector <Pipe>& pipes)
+{
+	for (int i = 0; i < pipes.size(); ++i)
+	{
+		if (ID == pipes[i].id)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
+{
+	for (int i = 0; i < cs.size(); ++i)
+	{
+		if (ID == cs[i].id)
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 
 	void PrintPipe(const Pipe& p)
@@ -127,20 +153,74 @@ struct Compressor {
 
 	}
 
-   Pipe CreatePipe() {
-	Pipe p;
-	
-	p.id = 0;
-	cout<< "User, enter diametr"<<endl;
-	p.d = rightenter();
-	cout << "User, enter yhe length of pipe" << endl;
-	p.length = rightenter2();
-	p.repair = 0;
-	return p;
-	
- }
+ //  Pipe CreatePipe() {
+	//Pipe p;
+	//
+	//p.id = 0;
+	//cout<< "User, enter diametr"<<endl;
+	//p.d = rightenter();
+	//cout << "User, enter yhe length of pipe" << endl;
+	//p.length = rightenter2();
+	//p.repair = 0;
+	//return p;
+	//
+ //}
 
+   void AddPipeInVector(vector <Pipe>& pipes)
+   {
+	    Pipe p;
+	   cout << "\Pipe " << pipes.size() + 1 << "\n\n";
 
+	   // Cоздание уникального id трубы
+	   int idBuf;
+	   while (true)
+	   {
+		   idBuf = RandomInt(1, 9999);
+		   if (CheckingUniquenessID(idBuf, pipes))
+		   {
+			   p.id = idBuf;
+			   break;
+		   }
+	   }
+	   cout << "User, enter diametr" << endl;
+	   p.d = rightenter();
+	   cout << "User, enter yhe length of pipe" << endl;
+	   p.length = rightenter2();
+	   
+	   pipes.push_back(p);
+
+	   
+   }
+   void AddKCInVector(vector <Compressor>& cs) 
+   {
+	   Compressor c;
+	   cout << "\Compressor Station:  " << cs.size() + 1 << "\n\n";
+	   int idBuf;
+	   while (true)
+	   {
+		   idBuf = RandomInt(1, 9999);
+		   if (CheckingUniquenessID(idBuf, cs))
+		   {
+			   c.id = idBuf;
+			   break;
+		   }
+	   }
+	   cout << "User, enter a name of Comressor Station" << endl;
+	   getline(cin, c.name);
+
+	   cout << "How many tseh do you have ?  " << endl;
+	   c.tseh = rightenter();
+
+	   cout << "How many tseh is working ? " << endl;
+	   c.tsehInWork = rightenter();
+	   while ((c.tsehInWork < 0) || (c.tsehInWork > c.tseh)) {
+		   cout << "Error in enter, try again" << endl;
+		   c.tsehInWork = rightenter();
+	   }
+	   cout << "Enter efficiency " << endl;
+	   c.effect = rightenter();
+	   cs.push_back(c);
+   }
    void PrintComprssor(const Compressor & c) {
 	   if (c.tseh != 0) {
 		   cout << " Id of Comprassor Station is " << c.id << endl
@@ -152,26 +232,48 @@ struct Compressor {
 	   else
 		   cout << "Compression Station was not added" << endl;
    }
-   Compressor CreateCompressor(){
-	   Compressor c;
-	   c.id = 0;
-	   cout << "User, enter a name of Comressor Station" << endl;
-	   /*cin.ignore(32767, '\n');*/
-	   getline(cin, c.name);
+   ////Compressor CreateCompressor(){
+	  //// Compressor c;
+	  //// c.id = 0;
+	  //// cout << "User, enter a name of Comressor Station" << endl;
+	  //// /*cin.ignore(32767, '\n');*/
+	  //// getline(cin, c.name);
+	  //// 
+	  //// cout << "How many tseh do you have ?  "<<endl;
+	  //// c.tseh = rightenter();
+	  //// 
+	  //// cout << "How many tseh is working ? " << endl;
+	  //// c.tsehInWork = rightenter();
+	  //// while ((c.tsehInWork < 0) || (c.tsehInWork > c.tseh)) {
+		 ////  cout << "Error in enter, try again" << endl;
+		 ////  c.tsehInWork = rightenter();
+	  //// }
+	  //// cout << "Enter efficiency " << endl;
+	  //// c.effect = rightenter();
+	  //// 
+	  //// return c;
+   ////}
+   void ShowAllObjects(const vector <Pipe>& pipes,const vector <Compressor>& cs){
+	   cout << "Pipes:" << endl;
+	   cout << "ID:" << endl;
+	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].id); }
+	   cout << "Diametr:" << endl;
+	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].d); }
+	   cout << "Length:" << endl;
+	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].length); }
+	   cout << "Compressor Station:" << endl;
+	   cout << "Id:" << endl;
+	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].id); }
+	   cout << "Names" << endl;
+	   for (int i = 1; i < cs.size() + 1; ++i) { (cs[i - 1].name); }
+	   cout << "Effectivness:" << endl;
+	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].effect); }
+
+
+
 	   
-	   cout << "How many tseh do you have ?  "<<endl;
-	   c.tseh = rightenter();
-	   
-	   cout << "How many tseh is working ? " << endl;
-	   c.tsehInWork = rightenter();
-	   while ((c.tsehInWork < 0) || (c.tsehInWork > c.tseh)) {
-		   cout << "Error in enter, try again" << endl;
-		   c.tsehInWork = rightenter();
-	   }
-	   cout << "Enter efficiency " << endl;
-	   c.effect = rightenter();
-	   
-	   return c;
+
+
    }
    void SavePipeandComp(const Pipe& p, const Compressor& c) {
 	   ofstream fout;
@@ -272,6 +374,7 @@ int get_variant(int count) {
 }
 int main()
 {
+	vector <Pipe> pipes; pipes.resize(0); vector <Compressor> cs; cs.resize(0); int i;
 	
 	Pipe p{};
 	Compressor c{};
@@ -281,24 +384,27 @@ int main()
 		variant = get_variant(8);
 		switch (variant) {
 		case 1:
-			if (p.d != 0) {
-				cout << "The pipe is exsist" << endl;
-			}
+			/*if (p.d != 0) {
+				cout << "The pipe is exsist" << endl;*/
+			AddPipeInVector(pipes);
+			/*}
 			else {
 				p = CreatePipe();
-			}
+			}*/
 			break;
 		case 2:
-			if (c.tseh != 0) {
-				cout << "The station is already exist" << endl;
-			}
+			/*if (c.tseh != 0) {
+				cout << "The station is already exist" << endl;*/
+			/*}
 			else {
-				c = CreateCompressor();
-			}
+
+			/*}*/
+			AddKCInVector(cs);
 			break;
 		case 3:
-			PrintPipe(p);
-			PrintComprssor(c);
+			/*PrintPipe(p);
+			PrintComprssor(c);*/
+			ShowAllObjects(pipes, cs);
 			break;
 		case 4:
 			EditPipe(p);
