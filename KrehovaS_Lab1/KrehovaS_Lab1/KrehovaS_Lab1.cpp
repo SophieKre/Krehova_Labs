@@ -5,13 +5,15 @@
 #include <ctime> // Для рандома
 #include <vector>
 #include <fstream>// for saving and loading
-using namespace std;
+#include <algorithm>
+using namespace std; vector<int>vectorvtr;
 
 struct Pipe {
 	int id;
 	int d;
 	int length;// length of pipe
     bool repair ;
+	string namep;
 };
 struct Compressor {
 	int id, tseh;
@@ -49,20 +51,7 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 }
 
 
-	void PrintPipe(const Pipe& p)
-	{
-		if (p.d != 0) {
-			cout << " Id of pipe is " << p.id << endl;
-			cout << ". Diametr of pipe is  " << p.d << " mm." << endl;
-
-			cout << "The length of pipe is  " << p.length << endl;
-			cout << "Pipe in repair :(0-No,1-Yes )" << p.repair << endl;
-		}
-		else
-			cout << "The pipe is not added" << endl;
-
-
-}
+	
 
 	int rightenter() {
 		int enter;
@@ -153,18 +142,7 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 
 	}
 
- //  Pipe CreatePipe() {
-	//Pipe p;
-	//
-	//p.id = 0;
-	//cout<< "User, enter diametr"<<endl;
-	//p.d = rightenter();
-	//cout << "User, enter yhe length of pipe" << endl;
-	//p.length = rightenter2();
-	//p.repair = 0;
-	//return p;
-	//
- //}
+
 
    void AddPipeInVector(vector <Pipe>& pipes)
    {
@@ -182,6 +160,9 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 			   break;
 		   }
 	   }
+	   cout << "User, enter a name of Pipe" << endl;
+	   getline(cin, p.namep);
+
 	   cout << "User, enter diametr" << endl;
 	   p.d = rightenter();
 	   cout << "User, enter yhe length of pipe" << endl;
@@ -221,60 +202,177 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 	   c.effect = rightenter();
 	   cs.push_back(c);
    }
-   void PrintComprssor(const Compressor & c) {
-	   if (c.tseh != 0) {
-		   cout << " Id of Comprassor Station is " << c.id << endl
-			   << "The name of Comprassor Station is " << c.name << endl
-			   << "An amount of shops is  " << c.tseh << endl
-			   << "All shops that work is " << c.tsehInWork << endl
-			   << "The effectivness of Station is " << c.effect << endl;
-	   }
-	   else
-		   cout << "Compression Station was not added" << endl;
+   
+   string* CreateDimensionalDynamicArrayStr(int lines)
+   {
+	   string* array = new string  [lines];
+	   
+	   return array;
    }
-   ////Compressor CreateCompressor(){
-	  //// Compressor c;
-	  //// c.id = 0;
-	  //// cout << "User, enter a name of Comressor Station" << endl;
-	  //// /*cin.ignore(32767, '\n');*/
-	  //// getline(cin, c.name);
-	  //// 
-	  //// cout << "How many tseh do you have ?  "<<endl;
-	  //// c.tseh = rightenter();
-	  //// 
-	  //// cout << "How many tseh is working ? " << endl;
-	  //// c.tsehInWork = rightenter();
-	  //// while ((c.tsehInWork < 0) || (c.tsehInWork > c.tseh)) {
-		 ////  cout << "Error in enter, try again" << endl;
-		 ////  c.tsehInWork = rightenter();
-	  //// }
-	  //// cout << "Enter efficiency " << endl;
-	  //// c.effect = rightenter();
-	  //// 
-	  //// return c;
-   ////}
-   void ShowAllObjects(const vector <Pipe>& pipes,const vector <Compressor>& cs){
+   bool* Createarrayofrepair(int lines)
+   {
+	   bool* array = new bool[lines];
+	   return array;
+   }
+   int* Createarray(int lines)
+   {
+	   int* array = new int[lines];
+	   return array;
+   }
+
+   void ClearDimensionalDynamicArrayStr(string* array, int lines)
+   {
+	   
+	   
+		   delete[] array;
+	   }
+	  
+   
+  
+   void FillTable1(string** array, const vector <Pipe>&pipes)
+   {
+	  
+	   for (int i = 0; i < pipes.size(); ++i)
+	   {
+		   
+		   for (int j = 0; j < 5; ++j)
+		   {
+			   cout.width(4);
+			   cout << array[i][j]  ;
+
+			  
+
+		   }
+		   cout << endl;
+
+	   }
+   }
+   void FillTable2(string** array, const vector <Compressor>& cs)
+   {
+
+	   for (int i = 0; i < cs.size(); ++i)
+	   {
+
+		   for (int j = 0; j < 6; ++j)
+		   {
+			   cout.width(4);
+			   cout << array[i][j]+"  ";
+
+
+
+		   }
+		   cout << endl;
+
+	   }
+   }
+   void searchPipeNAme( vector<Pipe>& pipes ) {
+	   string nname; int h = 0; string choice;
+	   string* array3 = CreateDimensionalDynamicArrayStr(pipes.size() );
+	   int* ans = Createarray(pipes.size());
+	   for (int i = 0; i < pipes.size() ; ++i) {array3[i]= pipes[i].namep; }
+	   cout << "Enter a name of pipe" << endl;
+	   cin >> choice;
+	   for (int i = 0; i < pipes.size(); i++) {
+		   if (array3[i] == choice) { // проверяем равен ли arr[i] ключу
+			   ans[h++] = i;
+		   }
+	   }
+
+	   if (h != 0) { // проверяем были ли совпадения
+		   for (int i = 0; i < h; i++) {
+			   cout << " The pipe wih name: " << choice << " has number " << ans[i] << endl; //выводим все индексы
+			   cout << "Id: " << endl
+				   << pipes[i].id << endl
+				   << "Diameter: " << endl
+				   << pipes[i].d << endl
+				   <<"Length: "<<endl
+				   << pipes[i].length << endl
+				   <<"In repair: "<<endl
+				   << pipes[i].repair << endl;
+				   
+
+		   }
+	   }
+	   else {
+		   cout << "Мы не нашли ключ " << choice << " в массиве";
+	   }
+	   ClearDimensionalDynamicArrayStr(array3,pipes.size());
+	
+   }
+
+   void searchPipePriznak(vector<Pipe>& pipes) {
+	   int h = 0; bool choice;
+	   bool* array3 = Createarrayofrepair(pipes.size());
+	   int* ans = Createarray(pipes.size());
+	   for (int i = 0; i < pipes.size() ; ++i) { array3[i] = pipes[i ].repair; }
+	   cout << "Enter 1, if you want to find all pipes in repair. Enter 0, if you want to find all pipes that work " << endl;
+	   cin >> choice;
+	   for (int i = 0; i < pipes.size(); i++) {
+		   if (array3[i] == choice) { // проверяем равен ли arr[i] ключу
+			   ans[h++] = i;
+		   }
+	   }
+
+	   if (h != 0) { // проверяем были ли совпадения
+		   for (int i = 0; i < h; i++) {
+			   cout << "All pipes  " << choice << " находится в ячейке " << ans[i] << endl; //выводим все индексы
+		   }
+	   }
+	   else {
+		   cout << "Мы не нашли ключ " << choice << " в массиве";
+	   }
+
+
+   }
+
+   
+   void ShowAllObjects(const vector <Pipe>& pipes, const vector <Compressor>& cs) {
+	   
+	   system("cls");
+	   /*string** array1 = CreateTwoDimensionalDynamicArrayStr(pipes.size() + 1, 5);
+	   array1[0][0] = "number"; array1[0][1] = "id"; array1[0][2] = "length"; array1[0][3] = "diameter"; array1[0][4] = "in repair";
+	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][0] = to_string(i); }
+	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][1] = to_string(pipes[i - 1].id); }
+	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][2] = to_string(pipes[i - 1].length); }
+	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][3] = to_string(pipes[i - 1].d); }
+	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][4] = pipes[i - 1].repair; }
+
+	   string** array2 = CreateTwoDimensionalDynamicArrayStr(cs.size() + 1, 6);
+	   array2[0][0] = "number"; array2[0][1] = "id"; array2[0][2] = "name"; array2[0][3] = "amounr"; array2[0][4] = "work amounr"; array2[0][5] = "Эффективность";
+	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][0] = to_string(i); }
+	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][1] = to_string(cs[i - 1].id); }
+	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][2] = cs[i - 1].name; }
+	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][3] = to_string(cs[i - 1].tseh); }
+	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][4] = to_string(cs[i - 1].tsehInWork); }
+	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][5] = to_string(cs[i - 1].effect); }
+
+	   FillTable1(array1, pipes);
+	   FillTable2(array2, cs);*/
 	   cout << "Pipes:" << endl;
 	   cout << "ID:" << endl;
 	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].id); }
+	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].id; cout << endl; }
+	   cout << "Names of Pipes" << endl;
+	   for (int i = 1; i < pipes.size() + 1; ++i) { (pipes[i - 1].namep); }
+	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].namep; cout << endl; }
 	   cout << "Diametr:" << endl;
 	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].d); }
+	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].d; cout << endl; }
 	   cout << "Length:" << endl;
 	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].length); }
+	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].length; cout << endl; }
 	   cout << "Compressor Station:" << endl;
 	   cout << "Id:" << endl;
 	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].id); }
+	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].id; cout << endl; }
 	   cout << "Names" << endl;
 	   for (int i = 1; i < cs.size() + 1; ++i) { (cs[i - 1].name); }
+	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].name; cout << endl; }
 	   cout << "Effectivness:" << endl;
 	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].effect); }
-
-
-
-	   
-
-
+	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].effect; cout << endl; }
    }
+   
    void SavePipeandComp(const Pipe& p, const Compressor& c) {
 	   ofstream fout;
 	   fout.open("Data345.txt", ios_base::out);
@@ -353,10 +451,15 @@ void print_menu() {
 		<< "5. Edit comptession station" << endl
 		<< "6. Save file" << endl
 		<< "7. Load" << endl
-		<< "8.Exit" << endl
+		<< "8.Look for " << endl
+		<< "9.Exit" << endl
 	 << ">";
 }
-
+void menu2() {
+	system("cls");
+	cout << "1.Look for pipe " << endl
+	<< "2.Look for Compressor Station "<<endl;
+}
 
 
 int get_variant(int count) {
@@ -381,29 +484,19 @@ int main()
 	int variant; // выбранный пункт меню
 	do {
 		print_menu();
-		variant = get_variant(8);
+		variant = get_variant(9);
 		switch (variant) {
 		case 1:
-			/*if (p.d != 0) {
-				cout << "The pipe is exsist" << endl;*/
+			
 			AddPipeInVector(pipes);
-			/*}
-			else {
-				p = CreatePipe();
-			}*/
+			
 			break;
 		case 2:
-			/*if (c.tseh != 0) {
-				cout << "The station is already exist" << endl;*/
-			/*}
-			else {
-
-			/*}*/
+			
 			AddKCInVector(cs);
 			break;
 		case 3:
-			/*PrintPipe(p);
-			PrintComprssor(c);*/
+			
 			ShowAllObjects(pipes, cs);
 			break;
 		case 4:
@@ -420,12 +513,21 @@ int main()
 		case 7:
 			LoadPipeandComp(p,c);
 			break;
+		case 8:
+			menu2();
+			variant = get_variant(2);
+			switch(variant)
+			{
+			case 1:
+				searchPipeNAme(pipes);
+			}
 		}
+		
 
-		if (variant != 8)
+		if (variant != 9)
 			system("pause");
 		
-	} while (variant != 8);
+	} while (variant != 9);
 	return 0;
 
 
