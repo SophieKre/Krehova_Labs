@@ -167,7 +167,9 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 	   p.d = rightenter();
 	   cout << "User, enter yhe length of pipe" << endl;
 	   p.length = rightenter2();
-	   
+	   cout << "Pipe in repair :(0-No,1-Yes )" << endl;
+	   cin >> p.repair;
+	  
 	   pipes.push_back(p);
 
 	   
@@ -308,18 +310,9 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 	   cout << "Enter 1, if you want to find all pipes in repair. Enter 0, if you want to find all pipes that work " << endl;
 	   cin >> choice;
 	   for (int i = 0; i < pipes.size(); i++) {
-		   if (array3[i] == choice) { // проверяем равен ли arr[i] ключу
+		   if ( choice==true) { // проверяем равен ли arr[i] ключу
 			   ans[h++] = i;
 		   }
-	   }
-
-	   if (h != 0) { // проверяем были ли совпадения
-		   for (int i = 0; i < h; i++) {
-			   cout << "All pipes  " << choice << " находится в ячейке " << ans[i] << endl; //выводим все индексы
-		   }
-	   }
-	   else {
-		   cout << "Мы не нашли ключ " << choice << " в массиве";
 	   }
 
 
@@ -361,6 +354,16 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 	   cout << "Length:" << endl;
 	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].length); }
 	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].length; cout << endl; }
+	   cout << "Priznak: " << endl;
+	   for (int i = 1; i < pipes.size() + 1; ++i) {(pipes[i - 1].repair); }
+	   for (int i = 1; i < pipes.size() + 1; ++i) {
+		   if (pipes[i-1].repair == 0) {
+			   cout << "The pipe is not in repair now" << endl;
+		   }
+		   if (pipes[i-i].repair == 1) {
+			   cout << "The pipe is in repair now" << endl;
+		   }
+	   }
 	   cout << "Compressor Station:" << endl;
 	   cout << "Id:" << endl;
 	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].id); }
