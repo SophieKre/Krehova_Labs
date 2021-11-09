@@ -17,7 +17,7 @@ struct Pipe {
 };
 struct Compressor {
 	int id, tseh;
-		float tsehInWork;
+		int tsehInWork;
 	float effect; //koef of effectiveness
 	string name;
 
@@ -229,49 +229,104 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 		   delete[] array;
 	   }
 	  
-   
-  
-   void FillTable1(string** array, const vector <Pipe>&pipes)
+   void ClearDimensionalDynamicArrayb(bool* array, int lines)
    {
-	  
-	   for (int i = 0; i < pipes.size(); ++i)
-	   {
-		   
-		   for (int j = 0; j < 5; ++j)
-		   {
-			   cout.width(4);
-			   cout << array[i][j]  ;
 
+
+	   delete[] array;
+   }
+   void SearchPercent(vector<Compressor>cs) {
+	   int percent;
+	   int* arr_percent = Createarray(cs.size());
+	   cout << "Enter percent: " << endl;
+	   cin >> percent;
+	   for (int i = 0; i < cs.size(); ++i) { 
+		   arr_percent[i] = (cs[i].tsehInWork / cs[i].tseh) * 100; }
+	   for (int i = 0; i < cs.size(); ++i) {
+		   if (percent == arr_percent[i]) {
 			  
-
+			   cout << cs[i].name << endl;
+			   cout << " have" << endl;
+			   cout << arr_percent[i] << endl;
+				   cout <<" % " << endl;
 		   }
-		   cout << endl;
-
 	   }
+
    }
-   void FillTable2(string** array, const vector <Compressor>& cs)
-   {
-
-	   for (int i = 0; i < cs.size(); ++i)
-	   {
-
-		   for (int j = 0; j < 6; ++j)
-		   {
-			   cout.width(4);
-			   cout << array[i][j]+"  ";
-
-
-
-		   }
-		   cout << endl;
-
-	   }
-   }
-   void searchPipeNAme( vector<Pipe>& pipes ) {
+   void searchKC(vector<Compressor>& cs) {
 	   string nname; int h = 0; string choice;
-	   string* array3 = CreateDimensionalDynamicArrayStr(pipes.size() );
+	   string* array3 = CreateDimensionalDynamicArrayStr(cs.size());
+	   int* ans = Createarray(cs.size());
+	   for (int i = 0; i < cs.size(); ++i) { array3[i] = cs[i].name; }
+	   cout << "Enter a name of pipe" << endl;
+	   cin >> choice;
+	   for (int i = 0; i < cs.size(); i++) {
+		   if (array3[i] == choice) { // проверяем равен ли arr[i] ключу
+			   ans[h++] = i;
+		   }
+	   }
+
+	   if (h != 0) { // проверяем были ли совпадения
+		   for (int i = 0; i < h; i++) {
+			   cout << " The Compressor Station wih name: " << choice << " has number " << ans[i] << endl; //выводим все индексы
+			   cout << "Id: " << endl
+				   << cs[i].id << endl
+				   << "Tseh: " << endl
+				   << cs[i].tseh << endl
+				   << "Working tseh: " << endl
+				   << cs[i].tsehInWork << endl
+				   << "Effectivness: " << endl
+				   << cs[i].effect << endl;
+
+
+		   }
+	   }
+	   else {
+		   cout << "There is no Cs station with  name " << choice << endl;;
+	   }
+	   ClearDimensionalDynamicArrayStr(array3, cs.size());
+
+   }
+  
+   void searchKCNAme( vector<Compressor>& cs ) {
+	   string nname; int h = 0; string choice;
+	   string* array3 = CreateDimensionalDynamicArrayStr(cs.size() );
+	   int* ans = Createarray(cs.size());
+	   for (int i = 0; i < cs.size() ; ++i) {array3[i]= cs[i].name; }
+	   cout << "Enter a name of pipe" << endl;
+	   cin >> choice;
+	   for (int i = 0; i < cs.size(); i++) {
+		   if (array3[i] == choice) { // проверяем равен ли arr[i] ключу
+			   ans[h++] = i;
+		   }
+	   }
+
+	   if (h != 0) { // проверяем были ли совпадения
+		   for (int i = 0; i < h; i++) {
+			   cout << " The Compressor Station wih name: " << choice << " has number " << ans[i] << endl; //выводим все индексы
+			   cout << "Id: " << endl
+				   << cs[i].id << endl
+				   << "Tseh: " << endl
+				   << cs[i].tseh << endl
+				   <<"Working tseh: "<<endl
+				   << cs[i].tsehInWork << endl
+				   <<"Effectivness: "<<endl
+				   << cs[i].effect << endl;
+				   
+
+		   }
+	   }
+	   else {
+		   cout << "There is no Cs station with  name " << choice << endl;;
+	   }
+	   ClearDimensionalDynamicArrayStr(array3,cs.size());
+	
+   }
+   void searchPipeNAme(vector<Pipe>& pipes) {
+	   string nname; int h = 0; string choice;
+	   string* array3 = CreateDimensionalDynamicArrayStr(pipes.size());
 	   int* ans = Createarray(pipes.size());
-	   for (int i = 0; i < pipes.size() ; ++i) {array3[i]= pipes[i].namep; }
+	   for (int i = 0; i < pipes.size(); ++i) { array3[i] = pipes[i].namep; }
 	   cout << "Enter a name of pipe" << endl;
 	   cin >> choice;
 	   for (int i = 0; i < pipes.size(); i++) {
@@ -287,21 +342,20 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 				   << pipes[i].id << endl
 				   << "Diameter: " << endl
 				   << pipes[i].d << endl
-				   <<"Length: "<<endl
+				   << "Length: " << endl
 				   << pipes[i].length << endl
-				   <<"In repair: "<<endl
+				   << "In repair: " << endl
 				   << pipes[i].repair << endl;
-				   
+
 
 		   }
 	   }
 	   else {
-		   cout << "Мы не нашли ключ " << choice << " в массиве";
+		   cout << "There is no pipe with  name " << choice << endl;;
 	   }
-	   ClearDimensionalDynamicArrayStr(array3,pipes.size());
-	
-   }
+	   ClearDimensionalDynamicArrayStr(array3, pipes.size());
 
+   }
    void searchPipePriznak(vector<Pipe>& pipes) {
 	   int h = 0; bool choice;
 	   bool* array3 = Createarrayofrepair(pipes.size());
@@ -312,9 +366,23 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 	   for (int i = 0; i < pipes.size(); i++) {
 		   if ( choice==true) { // проверяем равен ли arr[i] ключу
 			   ans[h++] = i;
+			   
 		   }
 	   }
+	   
+	   if (h != 0) { // проверяем были ли совпадения
+		   cout << "Pipes in repair: " << endl;
+		   		   for (int i = 0; i < h; i++) {
+			   cout << " The pipe wih name: " << pipes[i].namep << " has number " << ans[i] << endl; //выводим все индексы
+			  
 
+		   }
+	   }
+	   else {
+		   cout << "This pipes is working: " << endl;
+		   for (int i = 0; i < h; i++) { cout << "The pipe with number: " << ans[i]; }
+	   }
+	   ClearDimensionalDynamicArrayb(array3, pipes.size());
 
    }
 
@@ -355,7 +423,7 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].length); }
 	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].length; cout << endl; }
 	   cout << "Priznak: " << endl;
-	   for (int i = 1; i < pipes.size() + 1; ++i) {(pipes[i - 1].repair); }
+	 
 	   for (int i = 1; i < pipes.size() + 1; ++i) {
 		   if (pipes[i-1].repair == 0) {
 			   cout << "The pipe is not in repair now" << endl;
@@ -463,7 +531,16 @@ void menu2() {
 	cout << "1.Look for pipe " << endl
 	<< "2.Look for Compressor Station "<<endl;
 }
-
+void menu3() {
+	system("cls");
+	cout << "1.Enter a name:  " << endl
+		<< "2.Enter 1, if you want to see all pipes in repair, 0 to see working pipes-0 " << endl;
+}
+void menu4() {
+	system("cls");
+	cout << "1.Look for name:  " << endl
+		<< "2.Look for percent " << endl;
+}
 
 int get_variant(int count) {
 	int variant;
@@ -522,7 +599,30 @@ int main()
 			switch(variant)
 			{
 			case 1:
-				searchPipeNAme(pipes);
+				menu3();
+				variant = get_variant(2);
+				switch (variant) {
+				case 1:
+					searchPipeNAme(pipes);
+					break;
+				case 2: 
+					searchPipePriznak(pipes);
+					break;
+				}
+			case 2:
+				menu4();
+				variant = get_variant(2);
+				switch (variant) {
+				case 1:
+					searchKCNAme(cs);
+					break;
+				case 2:
+					SearchPercent(cs);
+					break;
+				}
+				break;
+
+			
 			}
 		}
 		
