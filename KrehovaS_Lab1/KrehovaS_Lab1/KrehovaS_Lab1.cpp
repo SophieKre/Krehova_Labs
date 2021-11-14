@@ -6,18 +6,178 @@
 #include <vector>
 #include <fstream>// for saving and loading
 #include <algorithm>
+#define CRLF "\n"
 using namespace std; vector<int>vectorvtr;
+class StreamTable {
+public:
+	std::ostream& os_;
 
+	StreamTable(std::ostream& os = std::cout, char delimRow = ' ', char delimCol = ' ') :
+		borderExtOn_(true),
+		delimRowOn_(true),
+		delimRow_(delimRow),
+		delimColOn_(true),
+		delimCol_(delimCol),
+		os_(os),
+		colIndex_(0),
+		firstCell_(1) {}
+
+	virtual ~StreamTable() {}
+
+	virtual std::ostream& os() const {
+		return os_;
+	}
+
+	//отображать внешние границы?
+	void MakeBorderExt(bool on) {
+		borderExtOn_ = on;
+	}
+
+	//символ разделителя строк
+	void SetDelimRow(bool delimOn, char delimRow = ' ') {
+		delimRowOn_ = delimOn;
+		if (delimRowOn_)
+			delimRow_ = delimRow;
+		else if (!delimColOn_)
+			MakeBorderExt(false);
+	}
+
+	//символ разделителя столбцов
+	void SetDelimCol(bool delimOn, char delimCol = ' ') {
+		delimColOn_ = delimOn;
+		if (delimColOn_)
+			delimCol_ = delimCol;
+		else if (!delimRowOn_)
+			MakeBorderExt(false);
+	}
+
+	int AddCol(int colWidth, bool visible = true) {
+		colWidth_.push_back(colWidth);
+		visible_.push_back(visible);
+		return colWidth_.back();
+	}
+
+	void SetVisible(int col, bool flg) {
+		visible_[col - 1] = flg;
+	}
+
+	void SetCols(int colCount, int colWidth = 0) {
+		Clear();
+
+		for (int ic = 0; ic < colCount; ic++) {
+			AddCol(colWidth);
+		}
+	}
+
+	virtual void Clear() {
+		colWidth_.clear();
+		visible_.clear();
+		colIndex_ = 0;
+		firstCell_ = 1;
+	}
+
+	void AddEmptyRow() {
+		for (int ic = 0; ic < (int)colWidth_.size(); ic++) {
+			*this << "";
+		}
+	}
+
+	template <typename T> StreamTable& operator << (const T& obj) {
+		Push(obj);
+		return *this;
+	}
+
+	StreamTable& operator << (const std::string& s) {
+		colWidth_[colIndex_] = std::max(colWidth_[colIndex_], (int)s.size() + 1);
+		Push(s);
+		return *this;
+	}
+
+	StreamTable& operator << (const char* s) {
+		colWidth_[colIndex_] = std::max(colWidth_[colIndex_], (int)strlen(s) + 1);
+		Push(s);
+		return *this;
+	}
+
+protected:
+	int colIndex_;
+
+private:
+	bool borderExtOn_;
+	bool delimRowOn_;
+	char delimRow_;
+
+	bool delimColOn_;
+	char delimCol_;
+
+	std::vector<int> colWidth_;
+	bool firstCell_;
+	std::vector<int> visible_;
+
+	template <typename T>
+	void Push(const T& obj) {
+		if (firstCell_) {
+			if (borderExtOn_)
+				MakeRowBorder();
+
+			firstCell_ = 0;
+		}
+
+		if (visible_[colIndex_]) {
+			DelimCol();
+
+			os_.width(colWidth_[colIndex_]);
+			os_.fill(' ');
+			os_ << /*std::setiosflags(std::ios::left) << */obj;
+		}
+
+		if (++colIndex_ == (int)colWidth_.size()) {
+			DelimCol();
+
+			if (delimRowOn_)
+				MakeRowBorder();
+			else
+				os_ << CRLF;
+
+			colIndex_ = 0;
+		}
+	}
+
+	void MakeRowBorder() {
+		os_ << CRLF;
+		DelimCol();
+
+		int ic;
+		for (ic = 0; ic < (int)colWidth_.size(); ic++) {
+			if (visible_[ic]) {
+				os_.width(colWidth_[ic] + 1);
+				os_.fill(delimRow_);
+				DelimCol();
+			}
+		}
+		os_ << CRLF;
+	}
+
+	void DelimCol() {
+		if (delimColOn_ && (borderExtOn_ || colIndex_))
+			os_ << delimCol_;
+		else
+			os_ << ' ';
+	}
+
+	//запрет на копирование
+	StreamTable& operator = (const StreamTable&);
+};
 struct Pipe {
 	int id;
 	int d;
 	int length;// length of pipe
-    bool repair ;
+	bool repair;
 	string namep;
 };
 struct Compressor {
 	int id, tseh;
-		int tsehInWork;
+	int tsehInWork;
 	float effect; //koef of effectiveness
 	string name;
 
@@ -51,58 +211,52 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 }
 
 
-	
-
-	int rightenter() {
-		int enter;
-		while (true) {
-			cin >> enter;
-			if (cin.fail() || enter < 0 ) {
-				cin.clear();
-				cin.ignore(32767, '\n');
-				cout << "Enter another meaning " << endl;
 
 
-
-			}
-			else
-				return enter;
-
-
-		}
-	}
-	int rightenter2() {
-		int enter;
-		while (true) {
-			cin >> enter;
-			if (cin.fail() || enter < 0 || enter>100) {
-				cin.clear();
-				cin.ignore(32767, '\n');
-				cout << "Enter another meaning " << endl;
+int rightenter() {
+	int enter;
+	while (true) {
+		cin >> enter;
+		if (cin.fail() || enter < 0) {
+			cin.clear();
+			cin.ignore(32767, '\n');
+			cout << "Enter another meaning " << endl;
 
 
 
-			}
-			else
-				return enter;
-
-
-		}
-	}
-	
-
-	void EditPipe(Pipe &p) {
-		if (p.d != 0) {
-			p.repair = !p.repair;
-			if (p.repair == 0) {
-				cout << "The pipe is not in repair now" << endl;
-			}
-			if (p.repair == 1) {
-				cout << "The pipe is in repair now" << endl;
-			}
 		}
 		else
-			cout << "The pipe was not added" << endl;
+			return enter;
+
+
+	}
+}
+int rightenter2() {
+	int enter;
+	while (true) {
+		cin >> enter;
+		if (cin.fail() || enter < 0 || enter>100) {
+			cin.clear();
+			cin.ignore(32767, '\n');
+			cout << "Enter another meaning " << endl;
+
+
+
+		}
+		else
+			return enter;
+
+
+	}
+}
+
+
+void EditPipe(vector <Pipe>& pipes) {
+	Pipe p;
+	if (pipes.size() != 0) {
+		cout
+			;
+	}
 
 	}
 	void EditCompressor(Compressor& c)
@@ -385,42 +539,106 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 	   ClearDimensionalDynamicArrayb(array3, pipes.size());
 
    }
+   void LookForPipe(const vector <Pipe>& pipes2) {
 
+	   int h = 0; bool choice;
+	   //bool* array3 = Createarrayofrepair(pipes.size());
+	   //int* ans = Createarray(pipes.size());
+	   //for (int i = 0; i < pipes.size(); ++i) { array3[i] = pipes[i].repair; }
+	   //cout << "Enter 1, if you want to find all pipes in repair. Enter 0, if you want to find all pipes that work " << endl;
+	   //cin >> choice;
+	   //for (int i = 0; i < pipes.size(); i++) {
+		  // if (choice == true) { // проверяем равен ли arr[i] ключу
+			 //  ans[h++] = i;
+
+		  // }
+	   //}
+
+	   //if (h != 0) { // проверяем были ли совпадения
+		  // cout << "Pipes in repair: " << endl;
+		  // for (int i = 0; i < h; i++) {
+			 //  cout << " The pipe wih name: " << pipes[i].namep << " has number " << ans[i] << endl; //выводим все индексы
+
+
+		  // }
+	   //}
+	   //else {
+		  // cout << "This pipes is working: " << endl;
+		  // for (int i = 0; i < h; i++) { cout << "The pipe with number: " << ans[i]; }
+	   //}
+	   //ClearDimensionalDynamicArrayb(array3, pipes.size());
+
+   }
+   void StreamTablePipe(const vector <Pipe>& pipes)
+   {
+	   StreamTable st(std::cout);
+	   st.AddCol(5);
+	   st.AddCol(15);
+	   st.AddCol(10);
+	   st.AddCol(10);
+	   st.AddCol(10);
+	   st.AddCol(15);
+	   //разкомментировать, если столбцы имеют одинаковую толщину
+	   //st.Clear();
+	   //st.SetCols(4, 10);
+
+	   //st.SetVisible(1, false);//столбцы можно скрывать
+
+	   st.MakeBorderExt(true);
+	   st.SetDelimRow(true, '-');//st.SetDelimRow(false);//без символов-разделителей строк
+	   st.SetDelimCol(true, '|');//st.SetDelimCol(false);//без символов-разделителей строк
+
+	   //заголовок и значения выводятся одинаково
+	   st << "#" << "Name" << "Id" << "diameter"<<"Length"<<"In repair";
+	   
+	   for (int i = 0; i < pipes.size(); i++) {
+		   st << i + 1 << pipes[i].namep << pipes[i].id << pipes[i].d<<pipes[i].length<<pipes[i].repair;
+	   }
+   }
    
+   void StreamTableKC(const vector <Compressor>& cs)
+   {
+	   StreamTable st(std::cout);
+	   st.AddCol(5);
+	   st.AddCol(15);
+	   st.AddCol(10);
+	   st.AddCol(10);
+	   st.AddCol(10);
+	   st.AddCol(15);
+	   //разкомментировать, если столбцы имеют одинаковую толщину
+	   //st.Clear();
+	   //st.SetCols(4, 10);
+
+	   //st.SetVisible(1, false);//столбцы можно скрывать
+
+	   st.MakeBorderExt(true);
+	   st.SetDelimRow(true, '-');//st.SetDelimRow(false);//без символов-разделителей строк
+	   st.SetDelimCol(true, '|');//st.SetDelimCol(false);//без символов-разделителей строк
+
+	   //заголовок и значения выводятся одинаково
+	   st << "#" << "Name" << "Id" << "Shops" << "Working shops" << "Effectivness";
+
+	   for (int i = 0; i < cs.size(); i++) {
+		   st << i + 1 << cs[i].name << cs[i].id << cs[i].tseh << cs[i].tsehInWork << cs[i].effect;
+	   }
+   }
+
    void ShowAllObjects(const vector <Pipe>& pipes, const vector <Compressor>& cs) {
 	   
 	   system("cls");
-	   /*string** array1 = CreateTwoDimensionalDynamicArrayStr(pipes.size() + 1, 5);
-	   array1[0][0] = "number"; array1[0][1] = "id"; array1[0][2] = "length"; array1[0][3] = "diameter"; array1[0][4] = "in repair";
-	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][0] = to_string(i); }
-	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][1] = to_string(pipes[i - 1].id); }
-	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][2] = to_string(pipes[i - 1].length); }
-	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][3] = to_string(pipes[i - 1].d); }
-	   for (int i = 1; i < pipes.size() + 1; ++i) { array1[i][4] = pipes[i - 1].repair; }
-
-	   string** array2 = CreateTwoDimensionalDynamicArrayStr(cs.size() + 1, 6);
-	   array2[0][0] = "number"; array2[0][1] = "id"; array2[0][2] = "name"; array2[0][3] = "amounr"; array2[0][4] = "work amounr"; array2[0][5] = "Эффективность";
-	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][0] = to_string(i); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][1] = to_string(cs[i - 1].id); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][2] = cs[i - 1].name; }
-	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][3] = to_string(cs[i - 1].tseh); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][4] = to_string(cs[i - 1].tsehInWork); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { array2[i][5] = to_string(cs[i - 1].effect); }
-
-	   FillTable1(array1, pipes);
-	   FillTable2(array2, cs);*/
+	   StreamTablePipe(pipes);
+	   StreamTableKC(cs);
+	  /*
 	   cout << "Pipes:" << endl;
 	   cout << "ID:" << endl;
-	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].id); }
+	  
 	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].id; cout << endl; }
 	   cout << "Names of Pipes" << endl;
-	   for (int i = 1; i < pipes.size() + 1; ++i) { (pipes[i - 1].namep); }
+	
 	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].namep; cout << endl; }
 	   cout << "Diametr:" << endl;
-	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].d); }
 	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].d; cout << endl; }
 	   cout << "Length:" << endl;
-	   for (int i = 1; i < pipes.size() + 1; ++i) { to_string(pipes[i - 1].length); }
 	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].length; cout << endl; }
 	   cout << "Priznak: " << endl;
 	 
@@ -441,7 +659,7 @@ bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
 	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].name; cout << endl; }
 	   cout << "Effectivness:" << endl;
 	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].effect); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].effect; cout << endl; }
+	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].effect; cout << endl; }*/
    }
    
    void SavePipeandComp(const Pipe& p, const Compressor& c) {
@@ -533,8 +751,8 @@ void menu2() {
 }
 void menu3() {
 	system("cls");
-	cout << "1.Enter a name:  " << endl
-		<< "2.Enter 1, if you want to see all pipes in repair, 0 to see working pipes-0 " << endl;
+	cout << "1.Look for name:  " << endl
+		<< "2.Look for priznak.(Enter 1, if you want to see all pipes in repair, 0 to see working pipes-0) " << endl;
 }
 void menu4() {
 	system("cls");
@@ -580,7 +798,7 @@ int main()
 			ShowAllObjects(pipes, cs);
 			break;
 		case 4:
-			EditPipe(p);
+			/*EditPipe(p);*/
 			break;
 		case 5:
 			EditCompressor(c);
@@ -598,6 +816,7 @@ int main()
 			variant = get_variant(2);
 			switch(variant)
 			{
+				while (true) {
 			case 1:
 				menu3();
 				variant = get_variant(2);
@@ -605,9 +824,10 @@ int main()
 				case 1:
 					searchPipeNAme(pipes);
 					break;
-				case 2: 
+				case 2:
 					searchPipePriznak(pipes);
 					break;
+				}
 				}
 			case 2:
 				menu4();
