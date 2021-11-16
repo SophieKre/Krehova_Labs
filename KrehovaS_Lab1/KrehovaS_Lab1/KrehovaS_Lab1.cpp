@@ -492,21 +492,33 @@ void EditPipe(vector <Pipe>& pipes) {
 	   if (h != 0) { // проверяем были ли совпадения
 		   for (int i = 0; i < h; i++) {
 			   cout << " The pipe wih name: " << choice << " has number " << ans[i] << endl; //выводим все индексы
-			   cout << "Id: " << endl
-				   << pipes[i].id << endl
-				   << "Diameter: " << endl
-				   << pipes[i].d << endl
-				   << "Length: " << endl
-				   << pipes[i].length << endl
-				   << "In repair: " << endl
-				   << pipes[i].repair << endl;
+			  
 
 
+		   }
+		   system("clc");
+		   StreamTable st(std::cout);
+		   st.AddCol(5);
+		   st.AddCol(15);
+		   st.AddCol(10);
+		   st.AddCol(10);
+		   st.AddCol(10);
+		   st.AddCol(15);
+		   st.MakeBorderExt(true);
+		   st.SetDelimRow(true, '-');
+		   st.SetDelimCol(true, '|');
+		   cout << "Found pipes: " << endl;
+		   st << "#" << "Name" << "Id" << "diameter" << "Length" << "In repair";
+
+		   for (int i = 0; i < h; i++) {
+			   st << ans[i] << pipes[i].namep << pipes[i].id << pipes[i].d << pipes[i].length << pipes[i].repair;
 		   }
 	   }
 	   else {
 		   cout << "There is no pipe with  name " << choice << endl;;
 	   }
+	   
+
 	   ClearDimensionalDynamicArrayStr(array3, pipes.size());
 
    }
@@ -542,31 +554,7 @@ void EditPipe(vector <Pipe>& pipes) {
    void LookForPipe(const vector <Pipe>& pipes2) {
 
 	   int h = 0; bool choice;
-	   //bool* array3 = Createarrayofrepair(pipes.size());
-	   //int* ans = Createarray(pipes.size());
-	   //for (int i = 0; i < pipes.size(); ++i) { array3[i] = pipes[i].repair; }
-	   //cout << "Enter 1, if you want to find all pipes in repair. Enter 0, if you want to find all pipes that work " << endl;
-	   //cin >> choice;
-	   //for (int i = 0; i < pipes.size(); i++) {
-		  // if (choice == true) { // проверяем равен ли arr[i] ключу
-			 //  ans[h++] = i;
-
-		  // }
-	   //}
-
-	   //if (h != 0) { // проверяем были ли совпадения
-		  // cout << "Pipes in repair: " << endl;
-		  // for (int i = 0; i < h; i++) {
-			 //  cout << " The pipe wih name: " << pipes[i].namep << " has number " << ans[i] << endl; //выводим все индексы
-
-
-		  // }
-	   //}
-	   //else {
-		  // cout << "This pipes is working: " << endl;
-		  // for (int i = 0; i < h; i++) { cout << "The pipe with number: " << ans[i]; }
-	   //}
-	   //ClearDimensionalDynamicArrayb(array3, pipes.size());
+	  
 
    }
    void StreamTablePipe(const vector <Pipe>& pipes)
@@ -628,38 +616,7 @@ void EditPipe(vector <Pipe>& pipes) {
 	   system("cls");
 	   StreamTablePipe(pipes);
 	   StreamTableKC(cs);
-	  /*
-	   cout << "Pipes:" << endl;
-	   cout << "ID:" << endl;
-	  
-	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].id; cout << endl; }
-	   cout << "Names of Pipes" << endl;
-	
-	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].namep; cout << endl; }
-	   cout << "Diametr:" << endl;
-	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].d; cout << endl; }
-	   cout << "Length:" << endl;
-	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].length; cout << endl; }
-	   cout << "Priznak: " << endl;
 	 
-	   for (int i = 1; i < pipes.size() + 1; ++i) {
-		   if (pipes[i-1].repair == 0) {
-			   cout << "The pipe is not in repair now" << endl;
-		   }
-		   if (pipes[i-i].repair == 1) {
-			   cout << "The pipe is in repair now" << endl;
-		   }
-	   }
-	   cout << "Compressor Station:" << endl;
-	   cout << "Id:" << endl;
-	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].id); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].id; cout << endl; }
-	   cout << "Names" << endl;
-	   for (int i = 1; i < cs.size() + 1; ++i) { (cs[i - 1].name); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].name; cout << endl; }
-	   cout << "Effectivness:" << endl;
-	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].effect); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].effect; cout << endl; }*/
    }
    
    void SavePipeandComp(const Pipe& p, const Compressor& c) {
@@ -767,7 +724,7 @@ int get_variant(int count) {
 
 	// пока ввод некорректен, сообщаем об этом и просим повторить его
 	while (sscanf_s(s.c_str(), "%d", &variant) != 1 || variant < 1 || variant > count) {
-		cout << "Incorrect input. Try again: "; // выводим сообщение об ошибке
+		cout << "Enter: "; // выводим сообщение об ошибке
 		getline(cin, s); // считываем строку повторно
 	}
 
