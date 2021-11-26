@@ -426,18 +426,12 @@ void AddPipeInVector(vector <Pipe>& pipes)
 
    }
 
-   template<typename T>                                  //Шаблон
-   using Filter = bool(*)(const KS&, T parametr);        //Указатель на функцию 
-
-   bool CheckByID(const KS& ks, int parametr)
-   {
-	   return ks.id == parametr;
-   }
-
-   bool CheckByName(const KS& ks, string parametr)        //Функция для поиска по имени
-   {
-	   return ks.name == parametr;
-   }
+	   i
+		   }
+	   }
+	   else {
+		   cout << "There is no pipe with  name " << choice << endl;;
+	   
 
    bool CheckByProcent(const KS& ks, double parametr)       //Функция для поиска по задействованным цехам
    {
@@ -481,34 +475,54 @@ void AddPipeInVector(vector <Pipe>& pipes)
 			   } while (id != 0 && ks_indexes.size() < MaxPossibleValue);
 		   }
 	   }
-	   else
-		   if (what_to_find == 2)
-		   {
-			   cout << "Введите имя кс: ";
-			   string find_name;
-			   cin >> find_name;
-			   ks_indexes = FindKS<string>(ks, CheckByName, find_name);
-		   }
-		   else
-			   if (what_to_find == 3 && MaxPossibleValue > 1)
-			   {
-				   double procent;
-				   cout << "Введите желаемый процент задействованных цехов: ";
-				   procent = GetNumber(0.0, 100.0);
-				   ks_indexes = FindKS(ks, CheckByProcent, procent);
-			   }
-			   else
-			   {
-				   cout << "Нельзя искать по проценту задействанных цехов!" << endl;
-			   }
-	   if (MaxPossibleValue > 1)
-		   return ks_indexes;
-	   else
-	   {
-		   if (ks_indexes.size() == 0)
-			   ks_indexes.push_back(-1);
-		   return ks_indexes;
+	   else {
+		   cout << "This pipes is working: " << endl;
+		   for (int i = 0; i < h; i++) { cout << "The pipe with number: " << ans[i]; }
 	   }
+	   ClearDimensionalDynamicArrayb(array3, pipes.size());
+
+   }
+   void LookForPipe(const vector <Pipe>& pipes2) {
+
+	   int h = 0; bool choice;
+	   //bool* array3 = Createarrayofrepair(pipes.size());
+	   //int* ans = Createarray(pipes.size());
+	   //for (int i = 0; i < pipes.size(); ++i) { array3[i] = pipes[i].repair; }
+	   //cout << "Enter 1, if you want to find all pipes in repair. Enter 0, if you want to find all pipes that work " << endl;
+	   //cin >> choice;
+	   //for (int i = 0; i < pipes.size(); i++) {
+		  // if (choice == true) { // проверяем равен ли arr[i] ключу
+			 //  ans[h++] = i;
+
+		  // }
+	   //}
+
+	   //if (h != 0) { // проверяем были ли совпадения
+		  // cout << "Pipes in repair: " << endl;
+		  // for (int i = 0; i < h; i++) {
+			 //  cout << " The pipe wih name: " << pipes[i].namep << " has number " << ans[i] << endl; //выводим все индексы
+
+
+		  // }
+	   //}
+	   //else {
+		  // cout << "This pipes is working: " << endl;
+		  // for (int i = 0; i < h; i++) { cout << "The pipe with number: " << ans[i]; }
+	   //}
+	   //ClearDimensionalDynamicArrayb(array3, pipes.size());
+
+   }
+   void StreamTablePipe(const vector <Pipe>& pipes)
+   {
+	   StreamTable st(std::cout);
+	   st.AddCol(5);
+	   st.AddCol(15);
+	   st.AddCol(10);
+	   st.AddCol(10);
+	   st.AddCol(10);
+	   st.AddCol(15);
+	   //разкомментировать, если столбцы имеют одинаковую толщину
+	   
    }
 
    void DeletePipes(vector<Pipe>& p)        //Удаление труб
@@ -529,78 +543,67 @@ void AddPipeInVector(vector <Pipe>& pipes)
 	   }
    }
 
-   void DeleteKS(vector<KS>& ks, vector<Pipe>& p)      //Удаление кс
-   {
-	   vector<int> ks_indexes = UserChooseKS(ks, ks.size());
-	   for (int i = 0; i < ks.size(); i++)
-	   {
-		   for (int j = 0; j < ks_indexes.size(); j++)
-		   {
-			   if (ks[i].id == ks[ks_indexes[j]].id)
-			   {
-				   
-				   ks.erase(ks.begin() + i);
-			   }
+   void ShowAllObjects(const vector <Pipe>& pipes, const vector <Compressor>& cs) {
+	   
+	  
+	  /*
+	   cout << "Pipes:" << endl;
+	   cout << "ID:" << endl;
+	  
+	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].id; cout << endl; }
+	   cout << "Names of Pipes" << endl;
+	
+	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].namep; cout << endl; }
+	   cout << "Diametr:" << endl;
+	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].d; cout << endl; }
+	   cout << "Length:" << endl;
+	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].length; cout << endl; }
+	   cout << "Priznak: " << endl;
+	 
+	   for (int i = 1; i < pipes.size() + 1; ++i) {
+		   if (pipes[i-1].repair == 0) {
+			   cout << "The pipe is not in repair now" << endl;
+		   }
+		   if (pipes[i-i].repair == 1) {
+			   cout << "The pipe is in repair now" << endl;
 		   }
 	   }
+	   cout << "Compressor Station:" << endl;
+	   cout << "Id:" << endl;
+	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].id); }
+	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].id; cout << endl; }
+	   cout << "Names" << endl;
+	   for (int i = 1; i < cs.size() + 1; ++i) { (cs[i - 1].name); }
+	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].name; cout << endl; }
+	   cout << "Effectivness:" << endl;
+	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].effect); }
+	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].effect; cout << endl; }*/
    }
-
-   void SaveData(const vector<Pipe>& p, const vector<KS>& ks, const Graph& g)       //Описание функции сохранения
-   {
-	   cout << "Введите название файла для сохранения" << endl;
-	   string filename;
-	   cin >> filename;
-	   filename += ".txt";
-	   ofstream outf;
-	   int i;
-	   outf.open(filename);
-	   if (p.size() == 0 && ks.size() == 0)   //Когда массивы данных труб и КС пусты, сохранения не произойдёт 
+   
+   void SavePipeandComp(const Pipe& p, const Compressor& c) {
+	   ofstream fout;
+	   fout.open("Data345.txt", ios_base::out);
+	   if (!fout.is_open()) // если файл не был открыт
 	   {
-		   cout << "Нет данных для сохранения!" << endl;
+		   cout << "Файл не может быть открыт или создан\n"; // напечатать соответствующее сообщение
+		   exit;
 	   }
-	   else if (outf.is_open())
-	   {
-		   outf << p.size() << endl;     //В первую строку выводим кол-во труб
-		   outf << ks.size() << endl;    //Во вторую кол-во КС 
-		   outf << g.Pipes_in_Graph.size() << endl;  //Сохраним основные параметры сети
-		   outf << g.KS_in_Graph.size() << endl;
-		   outf << g.ReNumbered_ks.size() << endl;
-		   outf << g.All_edges.size() << endl;
-		   for (i = 0; i < p.size(); i++)           //Выводим параметры каждой трубы по списку 
-		   {
-			   outf << p[i];
-		   }
-		   for (i = 0; i < ks.size(); i++)           //Выводим параметры каждой КС по списку 
-		   {
-			   outf << ks[i];
-		   }
-		   outf << g << endl;
-		   cout << "Данные успешно сохранены!" << endl;
-	   };
-	   outf.close();
-   }
+	   if (fout.good()) {
+		   if (p.d != 0) {
+			   fout << "Pipe:" << endl
+				   << p.id << endl
+				   << p.d << endl
+				   << p.length << endl;
 
-   void DownloadSaves(vector<Pipe>& p, vector<KS>& ks, Graph& g)         //Описание функции загрузки   
-   {
-	   cout << "Введите название файла для загрузки" << endl;
-	   string filename;
-	   cin >> filename;
-	   filename += ".txt";
-	   ifstream inf;
-	   int i = 0;
-	   int SizePipes, SizeKS, SizePipes_in_Graph, SizeKS_in_Graph, SizeRenumberedKS, SizeAll_edges;
-	   inf.open(filename);
-	   if (inf.is_open())
-	   {
-		   inf >> SizePipes;                       //Считываем количество труб в переменную
-		   inf >> SizeKS;                         //Теперь кол-во КС
-		   inf >> SizePipes_in_Graph;
-		   inf >> SizeKS_in_Graph;
-		   inf >> SizeRenumberedKS;
-		   inf >> SizeAll_edges;
-		   if (SizePipes == 0 && SizeKS == 0)    //Если значения нулевые не загружаем данные 
-		   {
-			   cout << "Не удалось загрузить данные, файл пуст!" << endl;
+		   }
+		   
+		   if (c.tseh != 0) {
+			   fout << "Compression " << endl;
+			   fout << c.id << endl
+				   << c.name << endl
+				   << c.tseh << endl
+				   << c.tsehInWork << endl
+				   << c.effect << endl;
 		   }
 		   else
 		   {
