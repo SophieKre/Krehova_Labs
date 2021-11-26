@@ -9,8 +9,7 @@ public:
 	int length;
 	int diametr;
 	bool repair;
-	int input;
-	int output;
+	
 	static int MAX_ID;
 	Pipe();
 	void ChangeStatus();

@@ -1,6 +1,6 @@
 #pragma once
 #include"Pipe.h"
-#include"KS.h"
+#include"KC.h"
 #include <vector>
 double GetNumber(double min, double max);
 
