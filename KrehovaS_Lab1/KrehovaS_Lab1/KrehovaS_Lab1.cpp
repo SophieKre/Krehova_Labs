@@ -6,8 +6,13 @@
 #include <vector>
 #include <fstream>// for saving and loading
 #include <algorithm>
+#include "pipe.h"
+#include "KC.h"
+#include "lab.h"
+
 #define CRLF "\n"
 using namespace std; vector<int>vectorvtr;
+
 class StreamTable {
 public:
 	std::ostream& os_;
@@ -168,171 +173,84 @@ private:
 	//запрет на копирование
 	StreamTable& operator = (const StreamTable&);
 };
-struct Pipe {
-	int id;
-	int d;
-	int length;// length of pipe
-	bool repair;
-	string namep;
-};
-struct Compressor {
-	int id, tseh;
-	int tsehInWork;
-	float effect; //koef of effectiveness
-	string name;
 
-};
-int RandomInt(int left, int right)
+double GetNumber(double min, double max)          //Функция для проверки верного ввода с клавиутуры
 {
-	srand(time(NULL));
-	return left + (rand() % (right - left) + 1);
-}
-bool CheckingUniquenessID(const int& ID, const vector <Pipe>& pipes)
-{
-	for (int i = 0; i < pipes.size(); ++i)
+	double a;
+	while ((cin >> a).fail() || a < min || a > max)
 	{
-		if (ID == pipes[i].id)
+		cin.clear();
+		cin.ignore(32767, '\n');
+		cout << "Введите корректное число!" << endl;
+	}
+	return a;
+}
+//int RandomInt(int left, int right)
+//{
+//	srand(time(NULL));
+//	return left + (rand() % (right - left) + 1);
+//}
+//bool CheckingUniquenessID(const int& ID, const vector <Pipe>& pipes)
+//{
+//	for (int i = 0; i < pipes.size(); ++i)
+//	{
+//		if (ID == pipes[i].id)
+//		{
+//			return false;
+//		}
+//	}
+//	return true;
+//}
+//bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
+//{
+//	for (int i = 0; i < cs.size(); ++i)
+//	{
+//		if (ID == cs[i].id)
+//		{
+//			return false;
+//		}
+//	}
+//	return true;
+//}
+//
+
+
+
+
+
+void AddPipeInVector(vector <Pipe>& pipes)
+{
+	Pipe p1;
+	cout << "\Pipe " << pipes.size() + 1 << "\n\n";
+
+	// Cоздание уникального id трубы
+	/*int idBuf;
+	while (true)
+	{
+		idBuf = RandomInt(1, 9999);
+		if (CheckingUniquenessID(idBuf, pipes))
 		{
-			return false;
+			p.id = idBuf;
+			break;
 		}
-	}
-	return true;
-}
-bool CheckingUniquenessID(const int& ID, const vector <Compressor>& cs)
-{
-	for (int i = 0; i < cs.size(); ++i)
-	{
-		if (ID == cs[i].id)
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-
-
-
-int rightenter() {
-	int enter;
-	while (true) {
-		cin >> enter;
-		if (cin.fail() || enter < 0) {
-			cin.clear();
-			cin.ignore(32767, '\n');
-			cout << "Enter another meaning " << endl;
-
-
-
-		}
-		else
-			return enter;
-
-
-	}
-}
-int rightenter2() {
-	int enter;
-	while (true) {
-		cin >> enter;
-		if (cin.fail() || enter < 0 || enter>100) {
-			cin.clear();
-			cin.ignore(32767, '\n');
-			cout << "Enter another meaning " << endl;
-
-
-
-		}
-		else
-			return enter;
-
-
-	}
-}
-
-
-void EditPipe(vector <Pipe>& pipes) {
-	Pipe p;
-	if (pipes.size() != 0) {
-		cout
-			;
-	}
-
-	}
-	void EditCompressor(Compressor& c)
-	{
-		int num;
-		if (c.tseh != 0) {
-			cout << "Enter what do you want to do (continue the work of shops or stop the work of shops)" << endl;
-			cout << "1-Continue the work of shops" << endl;
-			cout << "2-stop the work of shops" << endl;
-			cin >> num;
-			int tzeh2;
-			switch (num) {
-			case 1: {
-				cout << "How many shops will continue working:";
-				tzeh2 = rightenter();
-				while (c.tsehInWork + tzeh2 > c.tseh) {
-					cout << "Error of enter, enter another meaning" << endl;
-					tzeh2 = rightenter();
-				}
-				c.tsehInWork = c.tsehInWork + tzeh2;
-				break;
-			}
-			case 2: {
-				cout << "How many shops will stop working:";
-				tzeh2 = rightenter();
-				while (c.tsehInWork - tzeh2 < 0) {
-					cout << "Error in enter, enter another meaning" << endl;
-					tzeh2 = rightenter();
-				}
-				c.tsehInWork = c.tsehInWork - tzeh2;
-				break;
-			}
-			}
-		}
-		else
-			cout << "Compression Station was not added" << endl;
-
-	}
-
-
-
-   void AddPipeInVector(vector <Pipe>& pipes)
-   {
-	    Pipe p;
-	   cout << "\Pipe " << pipes.size() + 1 << "\n\n";
-
-	   // Cоздание уникального id трубы
-	   int idBuf;
-	   while (true)
-	   {
-		   idBuf = RandomInt(1, 9999);
-		   if (CheckingUniquenessID(idBuf, pipes))
-		   {
-			   p.id = idBuf;
-			   break;
-		   }
-	   }
-	   cout << "User, enter a name of Pipe" << endl;
-	   getline(cin, p.namep);
+	}*/
 
 	   cout << "User, enter diametr" << endl;
-	   p.d = rightenter();
+	   p1.diametr = GetNumber(1, 60000);
 	   cout << "User, enter yhe length of pipe" << endl;
-	   p.length = rightenter2();
+	   p1.length = GetNumber(1, 100);
 	   cout << "Pipe in repair :(0-No,1-Yes )" << endl;
-	   cin >> p.repair;
+	   cin >> p1.repair;
 	  
-	   pipes.push_back(p);
+	   pipes.push_back(p1);
 
 	   
    }
-   void AddKCInVector(vector <Compressor>& cs) 
+   void AddKCInVector(vector <KS>& ks) 
    {
-	   Compressor c;
-	   cout << "\Compressor Station:  " << cs.size() + 1 << "\n\n";
-	   int idBuf;
+	   KS c;
+	   cout << "\Compressor Station:  " << ks.size() + 1 << "\n\n";
+	  /* int idBuf;
 	   while (true)
 	   {
 		   idBuf = RandomInt(1, 9999);
@@ -341,424 +259,404 @@ void EditPipe(vector <Pipe>& pipes) {
 			   c.id = idBuf;
 			   break;
 		   }
-	   }
-	   cout << "User, enter a name of Comressor Station" << endl;
-	   getline(cin, c.name);
-
+	   }*/
+	   
+	   c.SetName();
 	   cout << "How many tseh do you have ?  " << endl;
-	   c.tseh = rightenter();
+	   c.number_ceh= GetNumber(1,10000);
 
 	   cout << "How many tseh is working ? " << endl;
-	   c.tsehInWork = rightenter();
-	   while ((c.tsehInWork < 0) || (c.tsehInWork > c.tseh)) {
-		   cout << "Error in enter, try again" << endl;
-		   c.tsehInWork = rightenter();
-	   }
+	   c.number_ceh_inWork = GetNumber(0,1000);
+	   
 	   cout << "Enter efficiency " << endl;
-	   c.effect = rightenter();
-	   cs.push_back(c);
+	   c.efficiency = GetNumber(0,100);
+	   ks.push_back(c);
    }
-   
-   string* CreateDimensionalDynamicArrayStr(int lines)
+   void PrintData(const vector<Pipe>& p, const vector<KS>& ks)   //Функция для вывода данных в консоль
    {
-	   string* array = new string  [lines];
-	   
-	   return array;
-   }
-   bool* Createarrayofrepair(int lines)
-   {
-	   bool* array = new bool[lines];
-	   return array;
-   }
-   int* Createarray(int lines)
-   {
-	   int* array = new int[lines];
-	   return array;
-   }
-
-   void ClearDimensionalDynamicArrayStr(string* array, int lines)
-   {
-	   
-	   
-		   delete[] array;
-	   }
-	  
-   void ClearDimensionalDynamicArrayb(bool* array, int lines)
-   {
-
-
-	   delete[] array;
-   }
-   void SearchPercent(vector<Compressor>cs) {
-	   int percent;
-	   int* arr_percent = Createarray(cs.size());
-	   cout << "Enter percent: " << endl;
-	   cin >> percent;
-	   for (int i = 0; i < cs.size(); ++i) { 
-		   arr_percent[i] = (cs[i].tsehInWork / cs[i].tseh) * 100; }
-	   for (int i = 0; i < cs.size(); ++i) {
-		   if (percent == arr_percent[i]) {
-			  
-			   cout << cs[i].name << endl;
-			   cout << " have" << endl;
-			   cout << arr_percent[i] << endl;
-				   cout <<" % " << endl;
-		   }
-	   }
-
-   }
-   void searchKC(vector<Compressor>& cs) {
-	   string nname; int h = 0; string choice;
-	   string* array3 = CreateDimensionalDynamicArrayStr(cs.size());
-	   int* ans = Createarray(cs.size());
-	   for (int i = 0; i < cs.size(); ++i) { array3[i] = cs[i].name; }
-	   cout << "Enter a name of pipe" << endl;
-	   cin >> choice;
-	   for (int i = 0; i < cs.size(); i++) {
-		   if (array3[i] == choice) { // проверяем равен ли arr[i] ключу
-			   ans[h++] = i;
-		   }
-	   }
-
-	   if (h != 0) { // проверяем были ли совпадения
-		   for (int i = 0; i < h; i++) {
-			   cout << " The Compressor Station wih name: " << choice << " has number " << ans[i] << endl; //выводим все индексы
-			   cout << "Id: " << endl
-				   << cs[i].id << endl
-				   << "Tseh: " << endl
-				   << cs[i].tseh << endl
-				   << "Working tseh: " << endl
-				   << cs[i].tsehInWork << endl
-				   << "Effectivness: " << endl
-				   << cs[i].effect << endl;
-
-
-		   }
-	   }
-	   else {
-		   cout << "There is no Cs station with  name " << choice << endl;;
-	   }
-	   ClearDimensionalDynamicArrayStr(array3, cs.size());
-
-   }
-  
-   void searchKCNAme( vector<Compressor>& cs ) {
-	   string nname; int h = 0; string choice;
-	   string* array3 = CreateDimensionalDynamicArrayStr(cs.size() );
-	   int* ans = Createarray(cs.size());
-	   for (int i = 0; i < cs.size() ; ++i) {array3[i]= cs[i].name; }
-	   cout << "Enter a name of pipe" << endl;
-	   cin >> choice;
-	   for (int i = 0; i < cs.size(); i++) {
-		   if (array3[i] == choice) { // проверяем равен ли arr[i] ключу
-			   ans[h++] = i;
-		   }
-	   }
-
-	   if (h != 0) { // проверяем были ли совпадения
-		   for (int i = 0; i < h; i++) {
-			   cout << " The Compressor Station wih name: " << choice << " has number " << ans[i] << endl; //выводим все индексы
-			   cout << "Id: " << endl
-				   << cs[i].id << endl
-				   << "Tseh: " << endl
-				   << cs[i].tseh << endl
-				   <<"Working tseh: "<<endl
-				   << cs[i].tsehInWork << endl
-				   <<"Effectivness: "<<endl
-				   << cs[i].effect << endl;
-				   
-
-		   }
-	   }
-	   else {
-		   cout << "There is no Cs station with  name " << choice << endl;;
-	   }
-	   ClearDimensionalDynamicArrayStr(array3,cs.size());
-	
-   }
-   void searchPipeNAme(vector<Pipe>& pipes) {
-	   string nname; int h = 0; string choice;
-	   string* array3 = CreateDimensionalDynamicArrayStr(pipes.size());
-	   int* ans = Createarray(pipes.size());
-	   for (int i = 0; i < pipes.size(); ++i) { array3[i] = pipes[i].namep; }
-	   cout << "Enter a name of pipe" << endl;
-	   cin >> choice;
-	   for (int i = 0; i < pipes.size(); i++) {
-		   if (array3[i] == choice) { // проверяем равен ли arr[i] ключу
-			   ans[h++] = i;
-		   }
-	   }
-
-	   if (h != 0) { // проверяем были ли совпадения
-		   for (int i = 0; i < h; i++) {
-			   cout << " The pipe wih name: " << choice << " has number " << ans[i] << endl; //выводим все индексы
-			   cout << "Id: " << endl
-				   << pipes[i].id << endl
-				   << "Diameter: " << endl
-				   << pipes[i].d << endl
-				   << "Length: " << endl
-				   << pipes[i].length << endl
-				   << "In repair: " << endl
-				   << pipes[i].repair << endl;
-
-
-		   }
-	   }
-	   else {
-		   cout << "There is no pipe with  name " << choice << endl;;
-	   }
-	   ClearDimensionalDynamicArrayStr(array3, pipes.size());
-
-   }
-   void searchPipePriznak(vector<Pipe>& pipes) {
-	   int h = 0; bool choice;
-	   bool* array3 = Createarrayofrepair(pipes.size());
-	   int* ans = Createarray(pipes.size());
-	   for (int i = 0; i < pipes.size() ; ++i) { array3[i] = pipes[i ].repair; }
-	   cout << "Enter 1, if you want to find all pipes in repair. Enter 0, if you want to find all pipes that work " << endl;
-	   cin >> choice;
-	   for (int i = 0; i < pipes.size(); i++) {
-		   if ( choice==true) { // проверяем равен ли arr[i] ключу
-			   ans[h++] = i;
-			   
-		   }
-	   }
-	   
-	   if (h != 0) { // проверяем были ли совпадения
-		   cout << "Pipes in repair: " << endl;
-		   		   for (int i = 0; i < h; i++) {
-			   cout << " The pipe wih name: " << pipes[i].namep << " has number " << ans[i] << endl; //выводим все индексы
-			  
-
-		   }
-	   }
-	   else {
-		   cout << "This pipes is working: " << endl;
-		   for (int i = 0; i < h; i++) { cout << "The pipe with number: " << ans[i]; }
-	   }
-	   ClearDimensionalDynamicArrayb(array3, pipes.size());
-
-   }
-   void LookForPipe(const vector <Pipe>& pipes2) {
-
-	   int h = 0; bool choice;
-	   //bool* array3 = Createarrayofrepair(pipes.size());
-	   //int* ans = Createarray(pipes.size());
-	   //for (int i = 0; i < pipes.size(); ++i) { array3[i] = pipes[i].repair; }
-	   //cout << "Enter 1, if you want to find all pipes in repair. Enter 0, if you want to find all pipes that work " << endl;
-	   //cin >> choice;
-	   //for (int i = 0; i < pipes.size(); i++) {
-		  // if (choice == true) { // проверяем равен ли arr[i] ключу
-			 //  ans[h++] = i;
-
-		  // }
-	   //}
-
-	   //if (h != 0) { // проверяем были ли совпадения
-		  // cout << "Pipes in repair: " << endl;
-		  // for (int i = 0; i < h; i++) {
-			 //  cout << " The pipe wih name: " << pipes[i].namep << " has number " << ans[i] << endl; //выводим все индексы
-
-
-		  // }
-	   //}
-	   //else {
-		  // cout << "This pipes is working: " << endl;
-		  // for (int i = 0; i < h; i++) { cout << "The pipe with number: " << ans[i]; }
-	   //}
-	   //ClearDimensionalDynamicArrayb(array3, pipes.size());
-
-   }
-   void StreamTablePipe(const vector <Pipe>& pipes)
-   {
-	   StreamTable st(std::cout);
-	   st.AddCol(5);
-	   st.AddCol(15);
-	   st.AddCol(10);
-	   st.AddCol(10);
-	   st.AddCol(10);
-	   st.AddCol(15);
-	   //разкомментировать, если столбцы имеют одинаковую толщину
-	   //st.Clear();
-	   //st.SetCols(4, 10);
-
-	   //st.SetVisible(1, false);//столбцы можно скрывать
-
-	   st.MakeBorderExt(true);
-	   st.SetDelimRow(true, '-');//st.SetDelimRow(false);//без символов-разделителей строк
-	   st.SetDelimCol(true, '|');//st.SetDelimCol(false);//без символов-разделителей строк
-
-	   //заголовок и значения выводятся одинаково
-	   st << "#" << "Name" << "Id" << "diameter"<<"Length"<<"In repair";
-	   
-	   for (int i = 0; i < pipes.size(); i++) {
-		   st << i + 1 << pipes[i].namep << pipes[i].id << pipes[i].d<<pipes[i].length<<pipes[i].repair;
-	   }
-   }
-   
-   void StreamTableKC(const vector <Compressor>& cs)
-   {
-	   StreamTable st(std::cout);
-	   st.AddCol(5);
-	   st.AddCol(15);
-	   st.AddCol(10);
-	   st.AddCol(10);
-	   st.AddCol(10);
-	   st.AddCol(15);
-	   //разкомментировать, если столбцы имеют одинаковую толщину
-	   //st.Clear();
-	   //st.SetCols(4, 10);
-
-	   //st.SetVisible(1, false);//столбцы можно скрывать
-
-	   st.MakeBorderExt(true);
-	   st.SetDelimRow(true, '-');//st.SetDelimRow(false);//без символов-разделителей строк
-	   st.SetDelimCol(true, '|');//st.SetDelimCol(false);//без символов-разделителей строк
-
-	   //заголовок и значения выводятся одинаково
-	   st << "#" << "Name" << "Id" << "Shops" << "Working shops" << "Effectivness";
-
-	   for (int i = 0; i < cs.size(); i++) {
-		   st << i + 1 << cs[i].name << cs[i].id << cs[i].tseh << cs[i].tsehInWork << cs[i].effect;
-	   }
-   }
-
-   void ShowAllObjects(const vector <Pipe>& pipes, const vector <Compressor>& cs) {
-	   
-	   system("cls");
-	   StreamTablePipe(pipes);
-	   StreamTableKC(cs);
-	  /*
-	   cout << "Pipes:" << endl;
-	   cout << "ID:" << endl;
-	  
-	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].id; cout << endl; }
-	   cout << "Names of Pipes" << endl;
-	
-	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].namep; cout << endl; }
-	   cout << "Diametr:" << endl;
-	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].d; cout << endl; }
-	   cout << "Length:" << endl;
-	   for (int i = 1; i < pipes.size() + 1; ++i) { cout << pipes[i - 1].length; cout << endl; }
-	   cout << "Priznak: " << endl;
-	 
-	   for (int i = 1; i < pipes.size() + 1; ++i) {
-		   if (pipes[i-1].repair == 0) {
-			   cout << "The pipe is not in repair now" << endl;
-		   }
-		   if (pipes[i-i].repair == 1) {
-			   cout << "The pipe is in repair now" << endl;
-		   }
-	   }
-	   cout << "Compressor Station:" << endl;
-	   cout << "Id:" << endl;
-	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].id); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].id; cout << endl; }
-	   cout << "Names" << endl;
-	   for (int i = 1; i < cs.size() + 1; ++i) { (cs[i - 1].name); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].name; cout << endl; }
-	   cout << "Effectivness:" << endl;
-	   for (int i = 1; i < cs.size() + 1; ++i) { to_string(cs[i - 1].effect); }
-	   for (int i = 1; i < cs.size() + 1; ++i) { cout << cs[i - 1].effect; cout << endl; }*/
-   }
-   
-   void SavePipeandComp(const Pipe& p, const Compressor& c) {
-	   ofstream fout;
-	   fout.open("Data345.txt", ios_base::out);
-	   if (!fout.is_open()) // если файл не был открыт
+	   int i;
+	   cout << "Список труб:" << endl;
+	   if (p.size() == 0)       //Если вектор труб пуст, ничего не выводим
 	   {
-		   cout << "Файл не может быть открыт или создан\n"; // напечатать соответствующее сообщение
-		   exit;
+		   cout << "Список труб пуст" << endl << " " << endl;
 	   }
-	   if (fout.good()) {
-		   if (p.d != 0) {
-			   fout << "Pipe:" << endl
-				   << p.id << endl
-				   << p.d << endl
-				   << p.length << endl;
-
-		   }
-		   
-		   if (c.tseh != 0) {
-			   fout << "Compression " << endl;
-			   fout << c.id << endl
-				   << c.name << endl
-				   << c.tseh << endl
-				   << c.tsehInWork << endl
-				   << c.effect << endl;
-		   }
-		   /*else*/
-			 // /* fout << "There are no data about Compression Station" << endl;*/
-
-	   //}
-		   fout.close();
-		   cout << "Saved";
-	   }
-	   else cout << "NO pipe or Comptrssor";
-   }
-
-   void LoadPipeandComp(Pipe &p,Compressor &c) {
-	   ifstream fin;
-	 ;
-	   fin.open("Data345.txt", ios_base::in);
-	   if (fin.good()) {
-		   while (!fin.eof())
+	   else
+	   {
+		   for (i = 0; i < p.size(); i++)
 		   {
-			   string str;
-			   fin >> str;
-			   if (str == "Pipe:") {
-				   fin >> p.id;
-				   fin >> p.d;
-				   fin >> p.length;
-				  
+			   cout << p[i] << endl;      //Используем перегрузку оператора вывода
+		   }
+	   }
+	   cout << "Список компрессорных станций:" << endl;
+	   if (ks.size() == 0)
+	   {
+		   cout << "Список компрессорных станций пуст" << endl << " " << endl;
+	   }
+	   else
+	   {
+		   for (i = 0; i < ks.size(); i++)
+		   {
+			   cout << ks[i] << endl;
+		   }
+	   }
+   }
+
+   vector<int> FindPipe(const vector<Pipe>& p, int MaxPossibleValue);   //Объявление чтобы использовать функцию
+
+   void RedactPipe(vector<Pipe>& p)            //Функция для редактирования трубы
+   {
+	   if (p.size() == 0)
+	   {
+		   cout << "Нет доступных труб для редактирования" << endl;
+	   }
+	   else
+	   {
+		   vector<int> pipe_indexes = FindPipe(p, p.size());             //Меняем статус найденных труб
+		   for (int i = 0; i < pipe_indexes.size(); i++)
+		   {
+			   p[pipe_indexes[i]].ChangeStatus();
+		   }
+	   }
+   }
+
+   void RedactKS(vector<KS>& ks)      //Функция для редактирования кс
+   {
+	   if (ks.size() == 0)
+	   {
+		   cout << "Нет доступных компрессорных станций для редактирования" << endl;
+	   }
+	   else
+	   {
+		   cout << "Введите ID компрессорной станции, которую хотите редактировать(диапазон " << 1 << "-" << ks[0].MAX_ID << ")" << endl;
+		   int id = GetNumber(1, ks[0].MAX_ID);
+		   cout << "Что именно вы хотите редактировать?" << endl;
+		   int WhatToRedact;  //Переменная, в неё запишется число, отражающее то что хочет редактировать пользователь
+		   do
+		   {
+			   cout << "1-редактировать имя" << endl << "2-редактировать кол-во цехов" << endl
+				   << "3-редактировать количество работающих цехов" << endl
+				   << "0-закончить редактирование" << endl;   //Меню редактирования
+			   WhatToRedact = GetNumber(0, 3);
+			   switch (WhatToRedact)   //редактируем нужный параметр, в зависимости от переменной
+			   {
+			   case 1:
+				   ks[id].SetName();
+				   break;
+			   case 2:
+				   cout << "Введите новое кол-во цехов КС:" << endl;
+				   ks[id].SetNumber_ceh(GetNumber(ks[id].number_ceh_inWork, 100000));
+				   ks[id].efficiency = (ks[id].number_ceh_inWork / ks[id].number_ceh) * 100;;
+				   break;
+			   case 3:
+				   cout << "Введите новое кол-во работающих цехов КС:" << endl;
+				   ks[id].SetNumber_ceh_inWork(GetNumber(1.0, 100000.0));
+				   ks[id].efficiency = (ks[id].number_ceh_inWork / ks[id].number_ceh) * 100;;
+				   break;
+			   case 0:
+				   break;
 			   }
-			   if (str == "Compression") {
-				   fin >> c.id;
-				   
-				   string(c.name);
-				   
-				   getline(fin, c.name);
-				   fin >> c.tseh;
-				   fin >> c.tsehInWork;
-				   fin >> c.effect;
+		   } while (WhatToRedact != 0);   //Выходим из цикла, когда пользователь введёт 0
+	   }
+   }
+
+   vector<int> FindPipe(const vector<Pipe>& p, int MaxPossibleValue)        //Функция нахождения труб
+   {
+	   vector<int> res;
+	   if (MaxPossibleValue > 1)
+	   {
+		   cout << "1 - трубы в ремонте" << endl <<
+			   "2 - трубы без ремонта" << endl <<
+			   "3 - выбрать конкретные трубы" << endl;
+		   int what_to_find = GetNumber(1, 3);
+		   int i;
+		   if (what_to_find == 1)
+		   {
+			   for (i = 0; i < p.size(); i++)
+			   {
+				   if (p[i].repair)      //Трубы в ремонте
+					   res.push_back(i);
 			   }
 		   }
-		   cout << "Loaded";
+		   if (what_to_find == 2)
+		   {
+			   for (i = 0; i < p.size(); i++)
+			   {
+				   if (!p[i].repair)        //Трубы без ремонта
+					   res.push_back(i);
+			   }
+		   }
+		   if (what_to_find == 3)
+		   {
+			   if (p.size() != 0)
+			   {
+				   cout << "Вводите ID труб, которые хотите найти (диапазон " << 1 << "-" << p.size() << ")" << endl <<
+					   "Чтобы закончить, введите ноль" << endl;
+				   int id;
+				   do
+				   {                                                 //Ищем трубы по желанию пользователя
+					   id = GetNumber(0, p.size());
+					   if (id != 0)
+						   res.push_back(id - 1);
+				   } while (id != 0);
+			   }
+		   }
+		   if (res.size() == 0)
+			   cout << "Труб по данным параметрам не найдено!" << endl;
+		   return res;
 	   }
-	   
+	   else
+	   {
+		   if (p.size() > 0)
+		   {
+			   cout << "Можно выбрать только одну трубу!" << endl;
+			   cout << "Введите ID трубы, которую хотите выбрать (диапазон " << 1 << "-" << p[0].MAX_ID << ")" << endl;
+			   int pipe_id = GetNumber(1, p[0].MAX_ID);
+			   for (int i = 0; i < p.size(); i++)
+				   if (p[i].id == pipe_id)
+					   res.push_back(i);
+			   return res;
+		   }
+		   else
+		   {
+			   res.push_back(-1);
+			   cout << "Труб не существует!" << endl;
+			   return res;
+		   }
+	   }
 
-	   fin.close();
    }
+
+   template<typename T>                                  //Шаблон
+   using Filter = bool(*)(const KS&, T parametr);        //Указатель на функцию 
+
+   bool CheckByID(const KS& ks, int parametr)
+   {
+	   return ks.id == parametr;
+   }
+
+   bool CheckByName(const KS& ks, string parametr)        //Функция для поиска по имени
+   {
+	   return ks.name == parametr;
+   }
+
+   bool CheckByProcent(const KS& ks, double parametr)       //Функция для поиска по задействованным цехам
+   {
+	   return ks.efficiency >= parametr;
+   }
+
+   template<typename T>
+   vector<int> FindKS(const vector<KS>& ks, Filter<T> f, T parametr)         //Функция нахождения кс
+   {
+	   vector<int> res;                         //Вектор для хранения индексов
+	   int i;
+	   for (i = 0; i < ks.size(); i++)
+	   {
+		   if (f(ks[i], parametr))            //Проверяем совпадение с помощью указателя
+			   res.push_back(i);
+	   }
+	   return res;
+   }
+
+   vector<int> UserChooseKS(const vector<KS>& ks, int MaxPossibleValue)
+   {
+	   vector<int> ks_indexes;                                              //Вектор, хранящий индексы найденных кс
+	   cout << "1-Искать кс по ID" << endl << "2-Искать кс по названию" << endl << "3-Искать кс по проценту задействованных цехов" << endl;
+	   int what_to_find = GetNumber(1, 3);
+	   if (what_to_find == 1)
+	   {
+		   if (ks.size() != 0)
+		   {
+			   cout << "Вводите ID кс, которые хотите найти (диапазон " << 1 << "-" << ks[0].MAX_ID << ")" << endl <<
+				   "Чтобы закончить, введите ноль" << endl;
+			   int id;
+			   do
+			   {                                                 //Ищем кс по желанию пользователя
+				   id = GetNumber(0, ks[0].MAX_ID);
+				   if (id != 0)
+				   {
+					   for (int i = 0; i < ks.size(); i++)
+						   if (ks[i].id == id)
+							   ks_indexes.push_back(i);
+				   }
+			   } while (id != 0 && ks_indexes.size() < MaxPossibleValue);
+		   }
+	   }
+	   else
+		   if (what_to_find == 2)
+		   {
+			   cout << "Введите имя кс: ";
+			   string find_name;
+			   cin >> find_name;
+			   ks_indexes = FindKS<string>(ks, CheckByName, find_name);
+		   }
+		   else
+			   if (what_to_find == 3 && MaxPossibleValue > 1)
+			   {
+				   double procent;
+				   cout << "Введите желаемый процент задействованных цехов: ";
+				   procent = GetNumber(0.0, 100.0);
+				   ks_indexes = FindKS(ks, CheckByProcent, procent);
+			   }
+			   else
+			   {
+				   cout << "Нельзя искать по проценту задействанных цехов!" << endl;
+			   }
+	   if (MaxPossibleValue > 1)
+		   return ks_indexes;
+	   else
+	   {
+		   if (ks_indexes.size() == 0)
+			   ks_indexes.push_back(-1);
+		   return ks_indexes;
+	   }
+   }
+
+   void DeletePipes(vector<Pipe>& p)        //Удаление труб
+   {
+	   vector<int> pipe_indexes = FindPipe(p, p.size());
+	   for (int i = 0; i < p.size(); i++)
+	   {
+		   for (int j = 0; j < pipe_indexes.size(); j++)
+		   {
+			   if (p[i].id == p[pipe_indexes[j]].id)
+			   {
+
+				   
+				   
+				   p.erase(p.begin() + i);
+			   }
+		   }
+	   }
+   }
+
+   void DeleteKS(vector<KS>& ks, vector<Pipe>& p)      //Удаление кс
+   {
+	   vector<int> ks_indexes = UserChooseKS(ks, ks.size());
+	   for (int i = 0; i < ks.size(); i++)
+	   {
+		   for (int j = 0; j < ks_indexes.size(); j++)
+		   {
+			   if (ks[i].id == ks[ks_indexes[j]].id)
+			   {
+				   
+				   ks.erase(ks.begin() + i);
+			   }
+		   }
+	   }
+   }
+
+   void SaveData(const vector<Pipe>& p, const vector<KS>& ks, const Graph& g)       //Описание функции сохранения
+   {
+	   cout << "Введите название файла для сохранения" << endl;
+	   string filename;
+	   cin >> filename;
+	   filename += ".txt";
+	   ofstream outf;
+	   int i;
+	   outf.open(filename);
+	   if (p.size() == 0 && ks.size() == 0)   //Когда массивы данных труб и КС пусты, сохранения не произойдёт 
+	   {
+		   cout << "Нет данных для сохранения!" << endl;
+	   }
+	   else if (outf.is_open())
+	   {
+		   outf << p.size() << endl;     //В первую строку выводим кол-во труб
+		   outf << ks.size() << endl;    //Во вторую кол-во КС 
+		   outf << g.Pipes_in_Graph.size() << endl;  //Сохраним основные параметры сети
+		   outf << g.KS_in_Graph.size() << endl;
+		   outf << g.ReNumbered_ks.size() << endl;
+		   outf << g.All_edges.size() << endl;
+		   for (i = 0; i < p.size(); i++)           //Выводим параметры каждой трубы по списку 
+		   {
+			   outf << p[i];
+		   }
+		   for (i = 0; i < ks.size(); i++)           //Выводим параметры каждой КС по списку 
+		   {
+			   outf << ks[i];
+		   }
+		   outf << g << endl;
+		   cout << "Данные успешно сохранены!" << endl;
+	   };
+	   outf.close();
+   }
+
+   void DownloadSaves(vector<Pipe>& p, vector<KS>& ks, Graph& g)         //Описание функции загрузки   
+   {
+	   cout << "Введите название файла для загрузки" << endl;
+	   string filename;
+	   cin >> filename;
+	   filename += ".txt";
+	   ifstream inf;
+	   int i = 0;
+	   int SizePipes, SizeKS, SizePipes_in_Graph, SizeKS_in_Graph, SizeRenumberedKS, SizeAll_edges;
+	   inf.open(filename);
+	   if (inf.is_open())
+	   {
+		   inf >> SizePipes;                       //Считываем количество труб в переменную
+		   inf >> SizeKS;                         //Теперь кол-во КС
+		   inf >> SizePipes_in_Graph;
+		   inf >> SizeKS_in_Graph;
+		   inf >> SizeRenumberedKS;
+		   inf >> SizeAll_edges;
+		   if (SizePipes == 0 && SizeKS == 0)    //Если значения нулевые не загружаем данные 
+		   {
+			   cout << "Не удалось загрузить данные, файл пуст!" << endl;
+		   }
+		   else
+		   {
+			   int data;
+			   p.resize(SizePipes);
+			   ks.resize(SizeKS);
+			   g.ReNumbered_ks.resize(SizeRenumberedKS);
+			   g.All_edges.resize(SizeAll_edges);
+			   for (i = 0; i < p.size(); i++)   //По порядку записываем данные в массив труб
+				   inf >> p[i];
+			   for (i = 0; i < ks.size(); i++)    //По порядку записываем данные в массив КС
+				   inf >> ks[i];
+			   for (i = 0; i < SizePipes_in_Graph; i++)
+			   {
+				   inf >> data;
+				   g.Pipes_in_Graph.insert(data);
+			   }
+			   for (i = 0; i < SizeKS_in_Graph; i++)
+			   {
+				   inf >> data;
+				   g.KS_in_Graph.insert(data);
+			   }
+			   for (i = 0; i < g.ReNumbered_ks.size(); i++)
+				   inf >> g.ReNumbered_ks[i];
+			   for (i = 0; i < g.All_edges.size(); i++)
+			   {
+				   inf >> g.All_edges[i].a;
+				   inf >> g.All_edges[i].b;
+				   inf >> g.All_edges[i].cost;
+			   }
+			   cout << "Загрузка прошла успешно" << endl;
+		   }
+	   }
+	   else
+		   cout << "Не удалось произвести загрузку, введите корректное имя файла!" << endl;
+	   inf.close();
+   }
+
+   
    
 void print_menu() {
 	system("cls"); // очищаем экран
-	cout << "What do you want to do?" << endl
-		<< "1. Add pipe" << endl
-		<< "2. Add comprassor" << endl
-		<< "3. Print objects" << endl
-		<< "4. Edit pipe" << endl
-		<< "5. Edit comptession station" << endl
-		<< "6. Save file" << endl
-		<< "7. Load" << endl
-		<< "8.Look for " << endl
-		<< "9.Exit" << endl
+	cout << "Что хотите сделать?" << endl
+		<< "1. Добавить трубу" << endl
+		<< "2. Добавить компрессорную станцию" << endl
+		<< "3. Смотреть все объекты" << endl
+		<< "4. Рудактировать трубу" << endl
+		<< "5. Редактировать станции" << endl
+		<< "6. Искать трубу" << endl
+		<< "7. Искать компрессорную станцию" << endl
+		<< "8.Сохранить в файл " << endl
+		<< "9. Загрузить из файла" << endl
+		<<"10.Выйти"
 	 << ">";
 }
-void menu2() {
-	system("cls");
-	cout << "1.Look for pipe " << endl
-	<< "2.Look for Compressor Station "<<endl;
-}
-void menu3() {
-	system("cls");
-	cout << "1.Look for name:  " << endl
-		<< "2.Look for priznak.(Enter 1, if you want to see all pipes in repair, 0 to see working pipes-0) " << endl;
-}
-void menu4() {
-	system("cls");
-	cout << "1.Look for name:  " << endl
-		<< "2.Look for percent " << endl;
-}
+
 
 int get_variant(int count) {
 	int variant;
@@ -767,7 +665,7 @@ int get_variant(int count) {
 
 	// пока ввод некорректен, сообщаем об этом и просим повторить его
 	while (sscanf_s(s.c_str(), "%d", &variant) != 1 || variant < 1 || variant > count) {
-		cout << "Incorrect input. Try again: "; // выводим сообщение об ошибке
+		cout << "Enter: "; // выводим сообщение об ошибке
 		getline(cin, s); // считываем строку повторно
 	}
 
@@ -775,82 +673,53 @@ int get_variant(int count) {
 }
 int main()
 {
-	vector <Pipe> pipes; pipes.resize(0); vector <Compressor> cs; cs.resize(0); int i;
+	setlocale(LC_ALL, "Russian");
+	vector <Pipe> pipes; pipes.resize(0); vector <KS> ks; ks.resize(0); int i;
 	
 	Pipe p{};
-	Compressor c{};
+	KS c{};
 	int variant; // выбранный пункт меню
 	do {
 		print_menu();
-		variant = get_variant(9);
+		variant = get_variant(10);
 		switch (variant) {
 		case 1:
 			
-			AddPipeInVector(pipes);
 			
 			break;
 		case 2:
 			
-			AddKCInVector(cs);
+			
 			break;
 		case 3:
 			
-			ShowAllObjects(pipes, cs);
+			
 			break;
 		case 4:
 			/*EditPipe(p);*/
 			break;
 		case 5:
-			EditCompressor(c);
+			
 			
 			break;
 			
 		case 6:
-			SavePipeandComp(p, c);
+			
 			break;
 		case 7:
-			LoadPipeandComp(p,c);
+			
 			break;
 		case 8:
-			menu2();
-			variant = get_variant(2);
-			switch(variant)
-			{
-				while (true) {
-			case 1:
-				menu3();
-				variant = get_variant(2);
-				switch (variant) {
-				case 1:
-					searchPipeNAme(pipes);
-					break;
-				case 2:
-					searchPipePriznak(pipes);
-					break;
-				}
-				}
-			case 2:
-				menu4();
-				variant = get_variant(2);
-				switch (variant) {
-				case 1:
-					searchKCNAme(cs);
-					break;
-				case 2:
-					SearchPercent(cs);
-					break;
-				}
-				break;
-
+			break;
 			
 			}
-		}
+		
 		
 
-		if (variant != 9)
+		if (variant != 10)
 			system("pause");
 		
-	} while (variant != 9);
+	} while (variant != 10);
 	return 0;
 
 
