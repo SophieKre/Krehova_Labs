@@ -14,11 +14,7 @@ Pipe::Pipe()
 	output = 0;
 	MAX_ID++;
 }
-int RandomInt(int left, int right)
-{
-	srand(time(NULL));
-	return left + (rand() % (right - left) + 1);
-}
+
 
 
 void Pipe::ChangeStatus()   //Меняем статус ремонта
