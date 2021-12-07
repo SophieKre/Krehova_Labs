@@ -6,71 +6,65 @@
 using namespace std;
 
 int KS::MAX_ID = 1;
+KS::KS(){
+id++;
 
-KS::KS()
-{
-	id = MAX_ID;
-	name = "Unknown";
-	number_ceh = 0;
-	number_ceh_inWork = 0;
-	efficiency = 0;
-	MAX_ID++;
+cout << "Adding Station\n";
+
+cout << "Input name:\n";
+cin >> name;
+
+cout << "Input number of workshops:\n";
+numberOfWorkshops = 0;
+while (numberOfWorkshops <= 0) {
+    numberOfWorkshops = inputInteger();
 }
 
-void KS::SetName()
-{
-	string NewName;
-	cout << "Введите имя компрессорной станции:";
-	cin.ignore(32767, '\n');
-	getline(cin, NewName);
-	name = NewName;
+cout << "Input number of working workshops:\n";
+numberOfWorkingWorkshops = -1;
+while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops) {
+    numberOfWorkingWorkshops = inputInteger();
+    if (numberOfWorkingWorkshops > numberOfWorkshops) {
+        cout << "Wrong input\n";
+        cout << "Try again:\n";
+    }
 }
 
-ostream& operator <<(ostream& out, const KS& ks)       //Перегрузка оператора вывода для структур кс
-{
-	out << "ID КС: " << ks.id;
-	out << "\tИмя КС: " << ks.name;
-	out << "\tРаботающие цеха: " << ks.number_ceh_inWork << "/" << ks.number_ceh;
-	out << "\tЭффективность КС: " << ks.efficiency << "%" << endl << endl;
-	return out;
+cout << "Input Efficiency (0 < e <= 100):\n";
+efficiency = 0;
+while (efficiency <= 0 || efficiency > 100) {
+    efficiency = inputInteger();
+    if (efficiency <= 0 || efficiency > 100) {
+        cout << "Wrong input\n";
+        cout << "Try again:\n";
+    };
 }
-void KS::SetNumber_ceh(double new_value)
-{
-	if (new_value < number_ceh_inWork)
-	{
-		cout << "Кол-во цехов должно быть больше или равно чем кол-во работающих цехов (больше " << number_ceh_inWork << ")" << endl;
-		new_value = GetNumber(number_ceh_inWork, 10000.0);
-	}
-	number_ceh = new_value;
 }
 
-void KS::SetNumber_ceh_inWork(double new_value)
-{
-	if (new_value > number_ceh)
-	{
-		cout << "Кол-во работающих цехов должно быть меньше или равно общего кол-ва цехов (меньше " << number_ceh << ")" << endl;
-		new_value = GetNumber(0.0, number_ceh);
-	}
-	number_ceh_inWork = new_value;
+Station::Station(string name, int numberOfWorkshops, int numberOfWorkingWorkshops, int efficiency) {
+    this->name = name;
+    this->numberOfWorkshops = numberOfWorkshops;
+    this->numberOfWorkingWorkshops = numberOfWorkingWorkshops;
+    this->efficiency = efficiency;
 }
 
-
-ifstream& operator>>(ifstream& inf, KS& ks)
+Station::~Station()
 {
-	inf >> ks.id;
-	inf >> ks.name;
-	inf >> ks.number_ceh;
-	inf >> ks.number_ceh_inWork;
-	inf >> ks.efficiency;
-	return inf;
 }
 
-ofstream& operator<<(ofstream& outf, const KS& ks)
-{
-	outf << ks.id << endl;
-	outf << ks.name << endl;
-	outf << ks.number_ceh << endl;
-	outf << ks.number_ceh_inWork << endl;
-	outf << ks.efficiency << endl;
-	return outf;
+void Station::output() {
+    cout << "\nStation:";
+    cout << "\nname: " << name;
+    cout << "\nnumber of workshops: " << numberOfWorkshops;
+    cout << "\nnumber of working workshops: " << numberOfWorkingWorkshops;
+    cout << "\nEfficiency: " << efficiency << "\n";
+}
+
+void Station::edit() {
+    cout << "\nEditing station";
+    Station::output();
+    cout << "\nInput number of working workshops:\n";
+    do {
+        numberOfWorkingWorkshops = choose(numberOfWorkshops);
+    } while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops);
 }

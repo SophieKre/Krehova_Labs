@@ -10,7 +10,7 @@ public:
 	int diametr;
 	bool repair;
 	void edit();
-	
+	string name;
 	static int MAX_ID;
 	Pipe();
 	void ChangeStatus();

@@ -7,10 +7,28 @@
 using namespace std;
 class Network {
 public:
-	unordered_map<int, Pipe>pipesMap;
-	unordered_map<int, KS>KcstationMap;
+	unordered_map<int, Pipe> pipesMap;
+	unordered_map<int, KS> stationsMap;
+
+	template <typename classType>
+	void outputMap(unordered_map<int, classType>& map);
+
+	void output();
+
+	void save();
+
+	void load();
+
+	//vector<int> search(unordered_map<int, Pipe>& map);
+
+	//vector<int> search(unordered_map<int, Station>& map);
+
 	template <typename classType>
 	void deleting(unordered_map<int, classType>& map);
+
+	template <typename classType>
+	void editing(unordered_map<int, classType>& map);
+
 	template <typename classType>
 	void editObjectById(unordered_map<int, classType>& map);
 
@@ -21,6 +39,18 @@ public:
 	void filtration(unordered_map<int, classType>& map, vector<int> vectorID);
 private:
 };
+
+template<typename classType>
+inline void Network::outputMap(unordered_map<int, classType>& map)
+{
+	if (map.size()) {
+		for (auto& item : map) {
+			cout << "\nID: " << item.first;
+			item.second.output();
+		}
+	}
+}
+
 template<typename classType>
 inline void Network::deleting(unordered_map<int, classType>& map) {
 	Network::outputMap(map);
@@ -38,13 +68,34 @@ inline void Network::deleting(unordered_map<int, classType>& map) {
 	} while (choice != 0);
 }
 
+template<typename classType>
+inline void Network::editing(unordered_map<int, classType>& map) {
+	Network::outputMap(map);
+	cout << "\nInput ID(s) or 0 to continue\n";
 
+	set<int> setID;
+	int choice;
+	do {
+		choice = choose(classType::id);
+		if (choice == 0)
+			break;
+		if (map.count(choice))
+			setID.insert(choice);
+		else
+			cout << "Out of map\n";
+	} while (choice != 0);
+
+	for (int i : setID) {
+		cout << "\nID: " << i;
+		map[i].edit();
+	}
+}
 
 template<typename classType>
 inline void Network::editObjectById(unordered_map<int, classType>& map) {
 	Network::outputMap(map);
 	if (map.size()) {
-		cout << "\nВведите id\n";
+		cout << "\ninput id\n";
 		int tempID = choose(classType::id);
 		if (map.count(tempID)) {
 			map[tempID].edit();
@@ -60,12 +111,12 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 {
 	vector<int> vectorID;
 	if (map.size() == 0) {
-		cout << "Map пуст";
+		cout << "Map is empty";
 		return vectorID;
 	}
 
 	if (typeid(classType) == typeid(Pipe)) {
-		cout << "\nИскать по :\n1) имени\n2) по количеству работающих цехов\n0) Выйти\n";
+		cout << "\nSearch by:\n1) name\n2) is working?\n0) Exit\n";
 
 		string name;
 		bool isWorking;
@@ -83,7 +134,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 			}
 			break;
 		case 2:
-			cout << "\nРаботает?\n0) Нет\n1) Да\n";
+			cout << "\nIs working?\n0) No\n1) Yes\n";
 			isWorking = choose(1);
 			for (auto& item : pipesMap)
 				if (item.second.isWorking == isWorking)
@@ -98,7 +149,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 		cout << "\n";
 	}
 	else {
-		cout << "\nИскать по :\n1) имени\n2) проценту незадействованных цехов\n0) Выйти\n";
+		cout << "\nSearch by:\n1) name\n2) percent of non working stations?\n0) Exit\n";
 
 		string name;
 		double percentOfWorkshops;
@@ -107,7 +158,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 		case 0:
 			return vectorID;
 		case 1:
-			cout << "\nВв:\n";
+			cout << "\nInput name:\n";
 			cin >> name;
 			for (auto& item : stationsMap) {
 				if (item.second.name == name) {
@@ -116,7 +167,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 			}
 			break;
 		case 2:
-			cout << "\nВведите процент незадействованных цехов или нажмите 0, чтобы выйти\n";
+			cout << "\nInput percent of non working stations or 0 to exit\n";
 			do
 			{
 				percentOfWorkshops = inputDouble();
@@ -124,7 +175,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 			if (percentOfWorkshops == 0)
 				return vectorID;
 
-			cout << "\n1) мееньше\n2) больше\n0) выйти\n";
+			cout << "\n1) less\n2) more\n0) exit\n";
 			switch (choose(2)) {
 			case 0:
 				return vectorID;
@@ -166,7 +217,7 @@ inline void Network::filtration(unordered_map<int, classType>& map, vector<int> 
 		map[i].output();
 	}
 
-	cout << "\nХотите изменить их/его?\n0) No\n1) Yes\n";
+	cout << "\nDo you want to change them (it)?\n0) No\n1) Yes\n";
 	if (!choose(1)) {
 		return;
 	}
