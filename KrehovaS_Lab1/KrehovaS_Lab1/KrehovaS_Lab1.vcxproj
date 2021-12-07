@@ -144,6 +144,7 @@
     <ClCompile Include="pipe.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header.h" />
     <ClInclude Include="KC.h" />
     <ClInclude Include="lab.h" />
     <ClInclude Include="pipe.h" />

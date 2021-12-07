@@ -22,8 +22,6 @@ void Pipe::ChangeStatus()   //Ìåíÿåì ñòàòóñ ğåìîíòà
 	repair = !repair;
 }
 
-
-
 ifstream& operator>>(ifstream& inf, Pipe& p)
 {
 	inf >> p.id;

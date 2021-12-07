@@ -3,12 +3,12 @@
 #include <conio.h>
 #include <string>
 #include <vector>
-#include <fstream>// for saving and loading
+#include <fstream>
 #include "pipe.h"
 #include "KC.h"
 #include "lab.h"
 
-using namespace std; vector<int>vectorvtr;
+using namespace std; 
 
 
 double GetNumber(double min, double max)          //Функция для проверки верного ввода с клавиутуры
@@ -288,9 +288,6 @@ void DeletePipes(vector<Pipe>& p)        //Удаление труб
 			if (p[i].id == p[pipe_indexes[j]].id)
 			{
 
-				
-				
-				
 				p.erase(p.begin() + i);
 			}
 		}
