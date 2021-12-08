@@ -22,7 +22,7 @@ double GetNumber(double min, double max)          //Функция для про
 	}
 	return a;
 }
-int choose(int number) {
+double choose(double number) {
 	int result;
 	do {
 		result = GetNumber(0,10000);
@@ -43,9 +43,10 @@ void Menu()          //Функция вывода меню, выводит сп
 		"5-Редактировать компрессорную станцию" << endl <<
 		"6-Поиск труб по признаку 'в ремонте'" << endl <<
 		"7-Поиск компрессорных станций" << endl <<
-		"8-Удалить объекты" << endl <<
-		"9-Сохранить в файл" << endl <<
-		"10-Загрузить из файла" << endl <<
+		"8-Удалить трубу" << endl <<
+		"9-Удалить компрессорную станцию" << endl<<
+		"10-Сохранить в файл" << endl <<
+		"11-Загрузить из файла" << endl <<
 		"0-Выход из программы" << endl;
 }
 
@@ -111,7 +112,9 @@ int main()
 		case 10:
 			
 			break;
-		
+		case  11:
+
+			break;
 		}
 		if (variant != 0)
 			system("pause");

@@ -236,7 +236,7 @@ inline void Network::filtration(unordered_map<int, classType>& map, vector<int> 
 		cout << "\nInput id(s), which you want to change or 0 to exit\n";
 
 		set<int> setOfChangeable;
-		int choice;
+		double choice;
 
 		do {
 			choice = choose(classType::id);

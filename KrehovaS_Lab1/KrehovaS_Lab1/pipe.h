@@ -1,20 +1,19 @@
 #pragma once
 #include <iostream>
-#include <fstream>
-
+#include <string>
+using namespace std;
 class Pipe
 {
 public:
-	int id;
-	int length;
-	int diametr;
+	string name1;
+	 int id;
+	double length;
+	double diametr;
 	bool repair;
-	void edit();
-	string name;
-	static int MAX_ID;
 	Pipe();
+	Pipe(string name, double diametr, double length,bool repair);
+	~Pipe();
 	void ChangeStatus();
-	friend std::ostream& operator <<(std::ostream& out, const Pipe& p);     //Для вывода полей класса в консоль
-	friend std::ifstream& operator >>(std::ifstream& inf, Pipe& p);         //Для ввода полей класса из файла
-	friend std::ofstream& operator <<(std::ofstream& outf, const Pipe& p);   //Для вывода полей класса в файл
+	void output();
+	
 };
