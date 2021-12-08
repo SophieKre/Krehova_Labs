@@ -22,7 +22,16 @@ double GetNumber(double min, double max)          //Функция для про
 	}
 	return a;
 }
+int choose(int number) {
+	int result;
+	do {
+		result = GetNumber(0,10000);
+		if (result < 0 || result > number)
+			cout << "Недопустимый ввод\n";
+	} while (result < 0 || result > number);
 
+	return result;
+}
 void Menu()          //Функция вывода меню, выводит список возможных действий пользователя
 {
 	system("cls");

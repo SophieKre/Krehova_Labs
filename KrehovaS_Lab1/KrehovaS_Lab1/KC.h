@@ -13,11 +13,12 @@ public:
 	double number_ceh_inWork;
 	double efficiency;
 	static int MAX_ID;
+	KS(string name,double number_ceh,double number_ceh_inWork,double efficiency);
 	KS();
-	void SetName();
-	void SetNumber_ceh(double new_value);
-	void SetNumber_ceh_inWork(double new_value);
-	friend ostream& operator <<(ostream& out, const KS& ks);       //Перегрузка оператора вывода для структур кс
-	friend ifstream& operator >>(ifstream& inf, KS& ks);
-	friend ofstream& operator <<(ofstream& outf, const KS& ks);
+	~KS();
+	void edit();
+	void output();
+
+	
+	
 };

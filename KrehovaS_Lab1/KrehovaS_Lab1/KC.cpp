@@ -15,56 +15,53 @@ cout << "Input name:\n";
 cin >> name;
 
 cout << "Input number of workshops:\n";
-numberOfWorkshops = 0;
-while (numberOfWorkshops <= 0) {
-    numberOfWorkshops = inputInteger();
-}
+number_ceh = 0;
+
+    number_ceh = GetNumber(1,10000);
+
 
 cout << "Input number of working workshops:\n";
-numberOfWorkingWorkshops = -1;
-while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops) {
-    numberOfWorkingWorkshops = inputInteger();
-    if (numberOfWorkingWorkshops > numberOfWorkshops) {
-        cout << "Wrong input\n";
-        cout << "Try again:\n";
-    }
+number_ceh_inWork = -1;
+
+    number_ceh_inWork= GetNumber(0,10000);
+    if (number_ceh_inWork > number_ceh) {
+        cout << "Количество работающих цехов должно быть меньше общего количества цехов\n";
+        cout << "Попробуйте снова:\n";
+    
 }
 
-cout << "Input Efficiency (0 < e <= 100):\n";
+cout << "IВведите эффективность (0 < e <= 100):\n";
 efficiency = 0;
-while (efficiency <= 0 || efficiency > 100) {
-    efficiency = inputInteger();
-    if (efficiency <= 0 || efficiency > 100) {
-        cout << "Wrong input\n";
-        cout << "Try again:\n";
-    };
-}
+
+    efficiency = GetNumber(1,100);
+    
 }
 
-Station::Station(string name, int numberOfWorkshops, int numberOfWorkingWorkshops, int efficiency) {
+
+KS::KS(string name, double number_ceh, double number_ceh_inWork, double efficiency) {
     this->name = name;
-    this->numberOfWorkshops = numberOfWorkshops;
-    this->numberOfWorkingWorkshops = numberOfWorkingWorkshops;
+    this->number_ceh = number_ceh;
+    this->number_ceh_inWork = number_ceh_inWork;
     this->efficiency = efficiency;
 }
 
-Station::~Station()
+KS::~KS()
 {
 }
 
-void Station::output() {
-    cout << "\nStation:";
-    cout << "\nname: " << name;
-    cout << "\nnumber of workshops: " << numberOfWorkshops;
-    cout << "\nnumber of working workshops: " << numberOfWorkingWorkshops;
-    cout << "\nEfficiency: " << efficiency << "\n";
+void KS::output() {
+    cout << "\tКомпрессорная станция:";
+    cout << "\tНазвание: " << name;
+    cout << "\tКоличемтво цехов: " << number_ceh;
+    cout << "\tКоличество работающих цехов: " << number_ceh_inWork;
+    cout << "\tЭффективность: " << efficiency << "\t";
 }
 
-void Station::edit() {
-    cout << "\nEditing station";
-    Station::output();
-    cout << "\nInput number of working workshops:\n";
+void KS::edit() {
+    cout << "\nРедактировать станцию";
+    KS::output();
+    cout << "\nВведите количество работающих цехов :\n";
     do {
-        numberOfWorkingWorkshops = choose(numberOfWorkshops);
-    } while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops);
+        number_ceh = choose(number_ceh_inWork);
+    } while (number_ceh_inWork < 0 || number_ceh_inWork > number_ceh);
 }
