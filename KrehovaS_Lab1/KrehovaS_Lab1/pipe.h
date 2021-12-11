@@ -6,14 +6,20 @@ class Pipe
 {
 public:
 	string name1;
-	static int id;
+	 int id;
 	double length;
-	double diametr;
+	int diametr;
 	bool repair;
+	static int MAX_ID;
 	Pipe();
-	Pipe(string name, double diametr, double length,bool repair);
-	~Pipe();
-	void ChangeStatus();
-	void output();
+	Pipe(ifstream& in);
+	int getId() const;
+	int getDiameter() const;
+	double getLength() const;
+	bool getRepair() const;
 	
+	void ChangeStatus();
+	friend std::ostream& operator <<(std::ostream& out, const Pipe& p);   
+	friend std::ifstream& operator >>(std::ifstream& inf, Pipe& p);         
+	friend std::ofstream& operator <<(std::ofstream& outf, const Pipe& p);   
 };

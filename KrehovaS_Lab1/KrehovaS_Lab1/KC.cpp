@@ -1,67 +1,105 @@
-#include "KC.h"
-#include "lab.h"
-#include <iostream>
-#include <string>
-#include "lab.h"
+Ôªø#include "KC.h"
+
+
 using namespace std;
 
-int KS::MAX_ID = 1;
+int KS::MAX_ID = 0;
 KS::KS(){
-id++;
-
-cout << "Adding Station\n";
-
-cout << "Input name:\n";
-cin >> name;
-
-cout << "Input number of workshops:\n";
-number_ceh = 0;
-
-    number_ceh = GetNumber(1,10000);
-
-
-cout << "Input number of working workshops:\n";
-number_ceh_inWork = -1;
-
-    number_ceh_inWork= GetNumber(0,10000);
-    if (number_ceh_inWork > number_ceh) {
-        cout << " ÓÎË˜ÂÒÚ‚Ó ‡·ÓÚ‡˛˘Ëı ˆÂıÓ‚ ‰ÓÎÊÌÓ ·˚Ú¸ ÏÂÌ¸¯Â Ó·˘Â„Ó ÍÓÎË˜ÂÒÚ‚‡ ˆÂıÓ‚\n";
-        cout << "œÓÔÓ·ÛÈÚÂ ÒÌÓ‚‡:\n";
-    
-}
-
-cout << "I¬‚Â‰ËÚÂ ˝ÙÙÂÍÚË‚ÌÓÒÚ¸ (0 < e <= 100):\n";
-efficiency = 0;
-
-    efficiency = GetNumber(1,100);
-    
+	this->id = ++MAX_ID;
+	cout << "–í–≤–µ–¥–∏—Ç–µ –Ω–∞–∑–≤–∞–Ω–∏–µ –ö–°: ";
+	cin.ignore();
+	getline(cin, this->name);
+	this->number_ceh = tryInput("–í–≤–µ–¥–∏—Ç–µ –∫–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ü–µ—Ö–æ–≤: ", 0);
+	this->number_ceh_inWork = tryInput("–í–≤–µ–¥–∏—Ç–µ –∫–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ä–∞–±–æ—Ç–∞—é—â–∏—Ö —Ü–µ—Ö–æ–≤ (–º–µ–Ω—å—à–µ/—Ä–∞–≤–Ω–æ –≤—Å–µ–≥–æ –∫–æ–ª–∏—á–µ—Å—Ç–≤–∞ —Ü–µ—Ö–æ–≤!): ", 0, number_ceh);
+	this->efficiency = tryInput("–í–≤–µ–¥–∏—Ç–µ —ç—Ñ—Ñ–µ–∫—Ç–∏–≤–Ω–æ—Å—Ç—å (0 - 100):", 0, 100);
 }
 
 
-KS::KS(string name, double number_ceh, double number_ceh_inWork, double efficiency) {
-    this->name = name;
-    this->number_ceh = number_ceh;
-    this->number_ceh_inWork = number_ceh_inWork;
-    this->efficiency = efficiency;
-}
 
-KS::~KS()
+ostream& operator <<(ostream& out, const KS& ks)       
 {
+	out << "ID ÔøΩÔøΩ: " << ks.id;
+	out << "\t–ù–∞–∑–≤–∞–Ω–∏–µ: " << ks.name;
+	out << "\t–í—Å–µ–≥–æ —Ü–µ—Ö–æ–≤: " << ks.number_ceh;
+	out << "\t–†–∞–±–æ—Ç–∞—é—â–∏—Ö —Ü–µ—Ö–æ–≤: " << ks.number_ceh_inWork;
+	out << "\t–≠—Ñ—Ñ–µ–∫—Ç–∏–≤–Ω–æ—Å—Ç—å: " << ks.efficiency << "%" << endl << endl;
+	return out;
+}
+KS::KS(ifstream& in)
+{
+	in >> this->id;
+	in.ignore();
+	getline(in, this->name);
+	in >> this->number_ceh;
+	in >> this->number_ceh_inWork;
+	in >> this->efficiency;
+}
+int KS::getId() const
+{
+	return id;
 }
 
-void KS::output() {
-    cout << "\t ÓÏÔÂÒÒÓÌ‡ˇ ÒÚ‡ÌˆËˇ:";
-    cout << "\tÕ‡Á‚‡ÌËÂ: " << name;
-    cout << "\t ÓÎË˜ÂÏÚ‚Ó ˆÂıÓ‚: " << number_ceh;
-    cout << "\t ÓÎË˜ÂÒÚ‚Ó ‡·ÓÚ‡˛˘Ëı ˆÂıÓ‚: " << number_ceh_inWork;
-    cout << "\t›ÙÙÂÍÚË‚ÌÓÒÚ¸: " << efficiency << "\t";
+string KS::getName() const
+{
+	return name;
 }
 
-void KS::edit() {
-    cout << "\n–Â‰‡ÍÚËÓ‚‡Ú¸ ÒÚ‡ÌˆË˛";
-    KS::output();
-    cout << "\n¬‚Â‰ËÚÂ ÍÓÎË˜ÂÒÚ‚Ó ‡·ÓÚ‡˛˘Ëı ˆÂıÓ‚ :\n";
-    do {
-        number_ceh = choose(number_ceh_inWork);
-    } while (number_ceh_inWork < 0 || number_ceh_inWork > number_ceh);
+int KS::getShopsCount() const
+{
+	return number_ceh;
+}
+
+int KS::getWorkingShopsCount() const
+{
+	return number_ceh_inWork;
+}
+
+double KS::getEfficiency() const
+{
+	return efficiency;
+}
+
+double KS::getOccupancyPercentage() const
+{
+	return number_ceh_inWork * (1.0 / number_ceh) * 100;
+}
+void KS::editKS()
+{
+	bool pick = tryInput<bool>("–≤—ã —Ö–æ—Ç–∏—Ç–µ –∑–∞–ø—É—Å—Ç–∏—Ç—å[1] –∏–ª–∏ –æ—Å—Ç–∞–Ω–æ–≤–∏—Ç—å [0] —Ä–∞–±–æ—Ç–∞—é–¥—â–∏–µ —Ü–µ—Ö–∏(0 - shops total)? ", 0, 1);
+	if (pick && number_ceh_inWork < number_ceh)
+	{
+		++number_ceh_inWork;
+	}
+	if (!pick && number_ceh_inWork > 0)
+	{
+		--number_ceh_inWork;
+	}
+}
+ifstream& operator>>(ifstream& inf, KS& ks)
+{
+	inf >> ks.id;
+	inf >> ks.name;
+	inf >> ks.number_ceh;
+	inf >> ks.number_ceh_inWork;
+	inf >> ks.efficiency;
+	return inf;
+}
+
+ofstream& operator<<(ofstream& outf, const KS& ks)
+{
+	outf << ks.id << endl;
+	outf << ks.name << endl;
+	outf << ks.number_ceh << endl;
+	outf << ks.number_ceh_inWork << endl;
+	outf << ks.efficiency << endl;
+	return outf;
+}
+istream& operator>>(istream& in, KS& ks)
+{
+	ks.id = ++KS::MAX_ID;
+	in >> ks.name;
+	ks.number_ceh = tryInput("–í–≤–µ–¥–∏—Ç–µ –∫–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ü–µ—Ö–æ–≤: ", 1);
+	ks.number_ceh_inWork = tryInput("–í–≤–µ–¥–∏—Ç–µ –∫–æ–ª–∏—á–µ—Ç–≤–æ —Ä–∞–±–æ—Ç–∞—é—â–∏—Ö —Ü–µ—Ö–æ–≤ : ", 1);
+	ks.efficiency = tryInput("–í–≤–µ–¥–∏—Ç–µ —ç—Ñ—Ñ–µ–∫—Ç–∏–≤–Ω–æ—Å—Ç—å: ", 1);
+	return in;
 }

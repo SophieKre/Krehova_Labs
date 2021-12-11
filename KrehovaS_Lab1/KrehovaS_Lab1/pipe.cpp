@@ -1,33 +1,45 @@
-#include "pipe.h"
+﻿#include "pipe.h"
 #include"lab.h"
 #include <string>
 using namespace std;
 
+int Pipe::MAX_ID = 0;
 
 Pipe::Pipe()
 {
-	id = MAX_ID;
-	length = 0;
-	diametr = 0;
-	repair = 0;
+	this->id = ++MAX_ID;
+	this->diametr = tryInput("Введите диаметр трубы: ", 0);
+	this->length = tryInput("Введите длину трубы: ", 0.0);
+	this->repair = false;
 	/*input = 0;
 	output = 0;*/
-	MAX_ID++;
-}
-int RandomInt(int left, int right)
-{
-	srand(time(NULL));
-	return left + (rand() % (right - left) + 1);
+	
 }
 
 
-void Pipe::ChangeStatus()   //?????? ?????? ???????
+
+void Pipe::ChangeStatus()  
 {
 	repair = !repair;
 }
 
+Pipe::Pipe(ifstream& in)
+{
+	in >> this->id;
+	in >> this->diametr;
+	in >> this->length;
+	in >> this->repair;
+}
 
 
+istream& operator>>(std::istream& in, Pipe& p)
+{
+	p.id = ++Pipe::MAX_ID;
+	p.length = tryInput("Пожалуста, введите длину: ", 1.0);
+	p.diametr = tryInput("Пожалуйста, введите диаметр: ", 1);
+	p.repair = false;
+	return in;
+}
 ifstream& operator>>(ifstream& inf, Pipe& p)
 {
 	inf >> p.id;
@@ -41,23 +53,48 @@ ifstream& operator>>(ifstream& inf, Pipe& p)
 
 ofstream& operator<<(ofstream& outf, const Pipe& p)
 {
-	outf << p.id << endl;
-	outf << p.length << endl;
-	outf << p.diametr << endl;
-	outf << p.repair << endl;
+	outf << "ID:" << p.id << endl;
+	outf <<"Длина:"<< p.length << endl;
+	outf <<"Диаметр"<< p.diametr << endl;
+	if (p.repair)
+	{
+		outf << "Труба нуждается в ремонте" << endl;
+	}
+	else
+	{
+		outf << "Труба рабочая" << endl;
+	}
+	outf << endl;
+	
 	/*outf << p.input << endl;
 	outf << p.output << endl;*/
 	return outf;
 }
-ostream& operator <<(ostream& out, const Pipe& p)    //?????????? ????????? ?????? ??? ???????? ????
+ostream& operator <<(ostream& out, const Pipe& p)    //���������� ��������� ������ ��� �������� ����
 {
-	out << "ID ?????: " << p.id;
-	out << "\t?????? ?????: " << p.length;
-	out << "\t??????? ?????: " << p.diametr;
-	out << "\t?????? ???????: " << p.repair << "\n";
-	/*if (p.input != 0 && p.output != 0)
-	{
-		out << "????? ????????? " << p.input << " ?? ? " << p.output << " ??" << endl;
-	}
-	return out;*/
+	out << "ID трубы: " << p.id;
+	out << "\tДлина трубы: " << p.length;
+	out << "\tДиаметр трубы: " << p.diametr;
+	out << "\tПризнак в ремонте: " << p.repair << "\n";
+	
+	return out;
+}
+int Pipe::getId() const
+{
+	return id;
+}
+
+int Pipe::getDiameter() const
+{
+	return diametr;
+}
+
+double Pipe::getLength() const
+{
+	return length;
+}
+
+bool Pipe::getRepair() const
+{
+	return repair;
 }
