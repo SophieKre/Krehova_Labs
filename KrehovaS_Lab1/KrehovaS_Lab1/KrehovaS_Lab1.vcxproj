@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="KC.cpp" />
     <ClCompile Include="KrehovaS_Lab1.cpp" />
+    <ClCompile Include="Network.cpp" />
     <ClCompile Include="pipe.cpp" />
   </ItemGroup>
   <ItemGroup>

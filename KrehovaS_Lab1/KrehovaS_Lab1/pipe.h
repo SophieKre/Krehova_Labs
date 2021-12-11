@@ -6,7 +6,7 @@ class Pipe
 {
 public:
 	string name1;
-	 int id;
+	static int id;
 	double length;
 	double diametr;
 	bool repair;

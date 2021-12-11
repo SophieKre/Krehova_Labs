@@ -7,18 +7,15 @@ using namespace std;
 class KS
 {
 public:
-	int id;
+	 int id;
 	string name;
 	double number_ceh;
 	double number_ceh_inWork;
 	double efficiency;
 	static int MAX_ID;
-	KS(string name,double number_ceh,double number_ceh_inWork,double efficiency);
-	KS();
-	~KS();
+	
 	void edit();
-	void output();
+	
 
-	
-	
+
 };
