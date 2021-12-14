@@ -65,7 +65,7 @@ double KS::getOccupancyPercentage() const
 }
 void KS::editKS()
 {
-	bool pick = tryInput<bool>("вы хотите запустить[1] или остановить [0] работаюдщие цехи? ", 0, 1);
+	bool pick = tryInput<bool>("вы хотите запустить[1] или остановить [0] работающие цехи? ", 0, 1);
 	if (pick && number_ceh_inWork < number_ceh)
 	{
 		++number_ceh_inWork;

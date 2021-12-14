@@ -66,8 +66,7 @@ ofstream& operator<<(ofstream& outf, const Pipe& p)
 	}
 	outf << endl;
 	
-	/*outf << p.input << endl;
-	outf << p.output << endl;*/
+	
 	return outf;
 }
 ostream& operator <<(ostream& out, const Pipe& p)    //���������� ��������� ������ ��� �������� ����

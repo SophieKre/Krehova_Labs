@@ -1,6 +1,5 @@
 ﻿
 #include <iostream> 
-#include <conio.h>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -17,7 +16,7 @@ void SaveData(const unordered_map <int, Pipe>& mapPipe, const unordered_map <int
 	ofstream fout;
 	cout << "Введите название файлв: ";
 	string filename;
-	cin >> filename;
+	getline(cin, filename);
 	fout.open(filename + ".txt", ios::out);
 	if (fout.is_open())
 	{
@@ -61,17 +60,8 @@ void Menu()          //Функция вывода меню, выводит сп
 template <typename T>
 void LoadData(unordered_map <int, T>& myMap, int mapSize, ifstream& fin)
 {
-	vector <int> idVec;
-	idVec.reserve(myMap.size());
-	for (const auto& it : myMap)
-	{
-		idVec.push_back(it.first);
-	}
-	for (int i : idVec)
-	{
-		myMap.erase(i);
-	} // из логики того, что всё несохранённые данные удаляются
-	while (mapSize--)
+	myMap.clear();
+	while (mapSize--)//!!!!!!!!!!!!!!!!
 	{
 		T val(fin);
 		myMap.insert(pair<int, T>(val.getId(), val));
@@ -157,9 +147,9 @@ int main()
 				{
 					cout << p.second;
 				}
-				for (const pair<const int, KS>& p : mapCS)
+				for (auto& [id, cs] : mapCS)
 				{
-					cout << p.second;
+					cout << cs;
 				}
 			}
 			else
@@ -172,7 +162,7 @@ int main()
 			if (mapPipe.size() != 0)
 			{
 				int id = tryInput("Введите id of трубы, которую хотите редактировать: ", 1, findMaxId(mapPipe));
-				unordered_map<int, Pipe>::iterator it = mapPipe.find(id);
+				auto it = mapPipe.find(id);
 				if (it != mapPipe.end())
 				{
 					it->second.ChangeStatus();
@@ -226,7 +216,8 @@ int main()
 			ifstream fin;
 			cout << "Введите название файла: ";
 			string filename;
-			cin >> filename;
+		
+			getline(cin, filename);
 			fin.open(filename + ".txt", ios::in);
 			if (fin.is_open())
 			{
@@ -235,11 +226,11 @@ int main()
 				fin >> sizeCS;
 				LoadData(mapPipe, sizePipe, fin);
 				LoadData(mapCS, sizeCS, fin);
+				Pipe::MAX_ID = findMaxId(mapPipe);
+				KS::MAX_ID = findMaxId(mapCS);
 				cout << "Данные успешно сохранены \n " << endl;
 			}
 			fin.close();
-			Pipe::MAX_ID = findMaxId(mapPipe);
-			KS::MAX_ID = findMaxId(mapCS);
 		}
 
 		break;
