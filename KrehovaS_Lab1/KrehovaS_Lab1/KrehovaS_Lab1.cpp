@@ -15,7 +15,7 @@ using namespace std;
 void SaveData(const unordered_map <int, Pipe>& mapPipe, const unordered_map <int, KS>& mapCS)
 {
 	ofstream fout;
-	cout << "Enter filename, please: ";
+	cout << "Введите название файлв: ";
 	string filename;
 	cin >> filename;
 	fout.open(filename + ".txt", ios::out);
@@ -31,7 +31,7 @@ void SaveData(const unordered_map <int, Pipe>& mapPipe, const unordered_map <int
 		{
 			fout << itc.second;
 		}
-		cout << "Data saved \n" << endl;
+		cout << "Данные сохранены\n" << endl;
 	}
 	fout.close();
 }
@@ -44,8 +44,8 @@ void Menu()          //Функция вывода меню, выводит сп
 		"1-Добавить трубу" << endl <<
 		"2-Добавить компрессорную станцию" << endl <<
 		"3-Просмотр всех объектов" << endl <<
-		"4-Редактировать трубу" << endl <<
-		"5-Редактировать компрессорную станцию" << endl <<
+		"4-Редактировать признак в ремонте трубы" << endl <<
+		"5-Редактировать компрессорную станцию по количеству работающих цез" << endl <<
 		"6-Сохранить в файл" << endl <<
 		"7-Загрузить из файла" << endl <<
 		"8-Посмотреть определенную трубу" << endl <<
@@ -266,7 +266,7 @@ int main()
 			if (mapCS.size() != 0)
 			{
 				int id;
-				id = tryInput("Please, enter correct id of compressor station you want to see: ", 1, findMaxId(mapCS));
+				id = tryInput("Введите id КС, которую хотите отредактировать: ", 1, findMaxId(mapCS));
 				unordered_map <int, KS>::iterator it = mapCS.find(id);
 				if (it != mapCS.end())
 				{
@@ -317,13 +317,13 @@ int main()
 			}
 			else
 			{
-				cout << endl << "At first, add station \n" << endl;
+				cout << endl << "Добавьте КС \n" << endl;
 			}
 			break;
 		case 12:
 			if (mapPipe.size() != 0)
 			{
-				bool workable = tryInput<bool>("You want to find all workable[1] or send for repair[0]? ", 0, 1);
+				bool workable = tryInput<bool>("Вы хотите найти все работающие[1] или сломанные[0]? ", 0, 1);
 				for (int& i : findAllByFilter(mapPipe, checkRepair, workable))
 				{
 					cout << mapPipe[i];
@@ -342,7 +342,7 @@ int main()
 					<< "2 - Редактировать все работающие трубы\n"
 					<< "3 - Редактировать все трубы \n"
 					<< "4 - Редактировать некотоые трубы по id  \n"
-					<< "0 - Leave this menu "
+					<< "0 - Покинуть меню "
 					<< endl;
 				int sort = tryInput("", 0);
 				switch (sort)
@@ -380,24 +380,24 @@ int main()
 				}
 				break;
 				default:
-					cout << "This action is unacceptable \n" << endl;
+					cout << "Невозможно сделать \n" << endl;
 					break;
 				}
 			}
 			else
 			{
-				cout << endl << "At first, add pipe \n" << endl;
+				cout << endl << "Добавьте трубу \n" << endl;
 			}
 			break;
 		case 14:
 			if (mapCS.size() != 0)
 			{
-				int pick = tryInput("You want to find all compressor station by name[0], by persentage of occupaton[1] or by efficiency[2]? ", 0, 2);
+				int pick = tryInput("Вы хотите найти КС по имени[0], проценту задействованных цехов[1] ? ", 0, 2);
 				switch (pick)
 				{
 				case 0:
 				{
-					cout << "Please, enter name you want to find: ";
+					cout << "Введите название КС: ";
 					string name;
 					cin >> name;
 					for (int& i : findAllByFilter(mapCS, checkName, name))
@@ -408,43 +408,34 @@ int main()
 				break;
 				case 1:
 				{
-					double percent = tryInput("Please, enter percentage of occupation: ", 0.0, 100.0);
-					bool sort = tryInput<bool>("You want to filter compressor stations with occupation percentage larger[1] or smaller[0] than entered : ", 0, 1);
+					double percent = tryInput("Введите процент : ", 0.0, 100.0);
+					bool sort = tryInput<bool>("Вы хотите редактировать КС с процентом больше[1] или меньше[0] : ", 0, 1);
 					for (int& i : findAllByFilter(mapCS, percentOfWorkingShops, percent, sort))
 					{
 						cout << mapCS[i];
 					}
 				}
 				break;
-				case 2:
-				{
-					double efficiency = tryInput("Please enter efficiency: ", 0.0, 1000.0);
-					bool sort = tryInput<bool>("You want to filter compressor stations with efficiency larger[1] or smaller[0] than entered : ", 0, 1);
-					for (int& i : findAllByFilter(mapCS, Efficiency, efficiency, sort))
-					{
-						cout << mapCS[i];
-					}
-				}
-				break;
+				
 				default:
-					cout << "This action unacceptable. " << endl;
+					cout << "Действие недоступно. " << endl;
 					break;
 				}
 			}
 			else
 			{
-				cout << endl << "At first, add station \n" << endl;
+				cout << endl << "Добавьте станцию \n" << endl;
 			}
 			break;
 		case 15:
 			if (mapCS.size() != 0)
 			{
-				cout << "Choose correct action: \n"
-					<< "1 - Edit compressor stations sorted by name \n"
-					<< "2 - Edit all compressor stations sorted by efficiency \n"
-					<< "3 - Edit all compressor stations sorted by percentage of occupation \n"
-					<< "4 - Edit several pipes with entered id \n"
-					<< "0 - Leave this menu "
+				cout << "Введите действик: \n"
+					<< "1 - Редактировать по имени \n"
+				
+					<< "2 - Редактировать все КС по процентам \n"
+					<< "3 -Редактироваь по id \n"
+					<< "0 - Выйти из меню"
 					<< endl;
 				int sort = tryInput("", 0);
 				switch (sort)
@@ -453,7 +444,7 @@ int main()
 					break;
 				case 1:
 				{
-					cout << "Please, enter correct name of stations you want to edit: ";
+					cout << "Введите верное название: ";
 					string name;
 					cin >> name;
 					for (int& i : findAllByFilter(mapCS, checkName, name))
@@ -463,21 +454,11 @@ int main()
 					}
 				}
 				break;
+				
 				case 2:
 				{
-					double efficiency = tryInput("Please enter efficiency: ", 0.0, 1000.0);
-					bool sort = tryInput<bool>("You want to edit compressor stations with efficiency larger[1] or smaller[0] than entered : ", 0, 1);
-					for (int& i : findAllByFilter(mapCS, Efficiency, efficiency, sort))
-					{
-						cout << mapCS[i];
-						mapCS[i].editKS();
-					}
-				}
-				break;
-				case 3:
-				{
-					double percent = tryInput("Please, enter percentage of occupation: ", 0.0, 100.0);
-					bool sort = tryInput<bool>("You want to filter compressor stations with occupation percentage larger[1] or smaller[0] than entered : ", 0, 1);
+					double percent = tryInput("Введите проценты: ", 0.0, 100.0);
+					bool sort = tryInput<bool>("вы хотите отфильтровать КС с большим процентом[1] или [0] меньше введеного : ", 0, 1);
 					for (int& i : findAllByFilter(mapCS, percentOfWorkingShops, percent, sort))
 					{
 						cout << mapCS[i];
@@ -485,7 +466,7 @@ int main()
 					}
 				}
 				break;
-				case 4:
+				case 3:
 				{
 					vector <int> vecId = inputVecId(mapCS);
 					for (int& i : vecId)
@@ -496,13 +477,13 @@ int main()
 				}
 				break;
 				default:
-					cout << "This action is unacceptable \n" << endl;
+					cout << "Невозможно сделать \n" << endl;
 					break;
 				}
 			}
 			else
 			{
-				cout << endl << "At first, add station \n" << endl;
+				cout << endl << "Добавьте КС \n" << endl;
 			}
 			break;
 		}

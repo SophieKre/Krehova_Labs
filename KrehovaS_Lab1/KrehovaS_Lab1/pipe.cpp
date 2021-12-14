@@ -11,8 +11,8 @@ Pipe::Pipe()
 	this->diametr = tryInput("Введите диаметр трубы: ", 0);
 	this->length = tryInput("Введите длину трубы: ", 0.0);
 	this->repair = false;
-	/*input = 0;
-	output = 0;*/
+	
+	
 	
 }
 
@@ -37,6 +37,7 @@ istream& operator>>(std::istream& in, Pipe& p)
 	p.id = ++Pipe::MAX_ID;
 	p.length = tryInput("Пожалуста, введите длину: ", 1.0);
 	p.diametr = tryInput("Пожалуйста, введите диаметр: ", 1);
+	
 	p.repair = false;
 	return in;
 }
@@ -46,8 +47,7 @@ ifstream& operator>>(ifstream& inf, Pipe& p)
 	inf >> p.length;
 	inf >> p.diametr;
 	inf >> p.repair;
-	/*inf >> p.input;
-	inf >> p.output;*/
+
 	return inf;
 }
 

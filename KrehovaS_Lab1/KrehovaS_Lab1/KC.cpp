@@ -18,7 +18,7 @@ KS::KS(){
 
 ostream& operator <<(ostream& out, const KS& ks)       
 {
-	out << "ID ��: " << ks.id;
+	out << "ID : " << ks.id;
 	out << "\tНазвание: " << ks.name;
 	out << "\tВсего цехов: " << ks.number_ceh;
 	out << "\tРаботающих цехов: " << ks.number_ceh_inWork;
@@ -65,7 +65,7 @@ double KS::getOccupancyPercentage() const
 }
 void KS::editKS()
 {
-	bool pick = tryInput<bool>("вы хотите запустить[1] или остановить [0] работаюдщие цехи(0 - shops total)? ", 0, 1);
+	bool pick = tryInput<bool>("вы хотите запустить[1] или остановить [0] работаюдщие цехи? ", 0, 1);
 	if (pick && number_ceh_inWork < number_ceh)
 	{
 		++number_ceh_inWork;
