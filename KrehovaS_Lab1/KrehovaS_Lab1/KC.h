@@ -24,6 +24,7 @@ public:
 	int getWorkingShopsCount() const;
 	double getEfficiency() const;
 	double getOccupancyPercentage() const;
+	
 	friend ostream& operator << (ostream& out, const KS& ks);
 	friend ifstream& operator >>(ifstream& inf, KS& ks);
 	friend ofstream& operator <<(ofstream& outf, const KS& ks);

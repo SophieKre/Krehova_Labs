@@ -96,4 +96,14 @@ double Pipe::getLength() const
 bool Pipe::getRepair() const
 {
 	return repair;
+
+}
+double Pipe::getPressureDropValue() const
+{
+	return length * 1.0 / diametr;
+}
+
+double Pipe::getPerformance() const
+{
+	return diametr * 1.0 / length;
 }

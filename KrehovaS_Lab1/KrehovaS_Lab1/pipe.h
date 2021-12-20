@@ -17,7 +17,8 @@ public:
 	int getDiameter() const;
 	double getLength() const;
 	bool getRepair() const;
-	
+	double getPressureDropValue() const;
+	double getPerformance() const;
 	void ChangeStatus();
 	friend std::ostream& operator <<(std::ostream& out, const Pipe& p);   
 	friend std::ifstream& operator >>(std::ifstream& inf, Pipe& p);         

@@ -7,6 +7,7 @@
 #include "KC.h"
 #include "lab.h"
 #include <unordered_map>
+#include "Network.h"
 using namespace std; 
 
 
@@ -48,13 +49,14 @@ void Menu()          //Функция вывода меню, выводит сп
 		"6-Сохранить в файл" << endl <<
 		"7-Загрузить из файла" << endl <<
 		"8-Посмотреть определенную трубу" << endl <<
-		"9-Посмотреть определенную КС" << endl<<
+		"9-Посмотреть определенную КС" << endl <<
 		"10-Удалить трубу" << endl <<
 		"11-Удалить КС" << endl <<
 		"12-Найти трубу" << endl <<
 		"13-Пакетное редактирование трубы" << endl <<
 		"14-Найти КС" << endl <<
 		"15-Пакетное редактирование КС" << endl <<
+		"16-Перейти в газотранспортую сеть" << endl<<
 		"0-Выход из программы" << endl;
 }
 template <typename T>
@@ -125,12 +127,15 @@ int main()
 	
 	unordered_map <int, Pipe> mapPipe;
 	unordered_map <int, KS> mapCS;
+	bool isRunning = true;
+	
+	CGraph gasNetwork;
 	//показываем меню            
 	do
 	{
 		Menu();
 		variant = get_variant(15);
-	
+
 		switch (variant)                   //цикл для обработки операций, выбранных пользователем
 		{
 		case 1:
@@ -216,7 +221,7 @@ int main()
 			ifstream fin;
 			cout << "Введите название файла: ";
 			string filename;
-		
+
 			getline(cin, filename);
 			fin.open(filename + ".txt", ios::in);
 			if (fin.is_open())
@@ -407,7 +412,7 @@ int main()
 					}
 				}
 				break;
-				
+
 				default:
 					cout << "Действие недоступно. " << endl;
 					break;
@@ -423,7 +428,7 @@ int main()
 			{
 				cout << "Введите действик: \n"
 					<< "1 - Редактировать по имени \n"
-				
+
 					<< "2 - Редактировать все КС по процентам \n"
 					<< "3 -Редактироваь по id \n"
 					<< "0 - Выйти из меню"
@@ -445,7 +450,7 @@ int main()
 					}
 				}
 				break;
-				
+
 				case 2:
 				{
 					double percent = tryInput("Введите проценты: ", 0.0, 100.0);
@@ -477,10 +482,172 @@ int main()
 				cout << endl << "Добавьте КС \n" << endl;
 			}
 			break;
+		case 16:
+		{
+			if (mapCS.size() >= 2 && !mapPipe.empty())
+			{
+				bool editingNet = true;
+				while (editingNet)
+				{
+					cout << "1 -Соединить КС с трубой \n"
+						<< "2 - Сделать топологическую сортировку\n"
+						<< "3 - Показать текущую сеть\n"
+
+						<< "4 - Удалить КС из сети\n"
+						<< "5 - Удалить трубу из сети\n"
+
+						<< "6 - Рассчитать максимальный поток\n"
+						<< "7 - Найти кратчайший пуь\n"
+						//<< "9 - swap compressor stations\n"
+						<< "0 - exit from this menu to main menu\n";
+					switch (tryInput("Выберете действие: ", 0))
+					{
+					case 1:
+					{
+						for (auto& p : mapCS)
+						{
+							cout << p.first << endl;
+						}
+						cout << "^ Все доступные id КС" << endl;
+						int IdF = tryInput("Введиите id первой доступнoй КС или [0] чтобы выйти): ", mapCS);
+						int IdS = tryInput("Введите id второй доступной КС (or [0] чтобы выйти): ", mapCS);
+						if (IdF != 0 && IdS != 0)
+						{
+							for (auto& p : mapPipe)
+							{
+								if (!p.second.getRepair() && !gasNetwork.HasEdge(p.first))
+								{
+									cout << p.first << endl;
+								}
+							}
+							cout << "^ Все доступные id труб" << endl;
+							int IdE = tryInput("Введите id доступных труб (или [0] чтобы выйти): ", mapPipe);
+							if (IdE != 0)
+							{
+								auto iter = mapPipe.find(IdE);
+								if (!iter->second.getRepair() && !gasNetwork.HasEdge(iter->first))
+								{
+									bool IsStraight = tryInput<bool>("If this pipe comes from first to second? ([0] - revers, [1] - yes): ", 0, 1);
+									gasNetwork.ConnectDirected(IdF, IdS, IdE, iter->second.getPressureDropValue(), iter->second.getPerformance(), IsStraight);
+								}
+								else
+								{
+									cout << "Жта труба отправлена в ремонт, выберите другую" << endl;
+								}
+							}
+							else
+							{
+								cout << "Трубы нет ";
+							}
+						}
+						break;
+					}
+					case 2:
+					{
+						cout << "Топологическая сортировка" << endl;
+						auto sort = gasNetwork.TopologicalSorting();
+						for (unsigned int i = 0; i < sort.size(); i++)
+						{
+							cout << i + 1 << "      " << sort[i] << endl;
+						}
+						if (!sort.empty())
+						{
+							if (tryInput<bool>("Хотите ли увидеть КС ([1] - да, [0] - нет): ", 0, 1))
+							{
+								for (int i : sort)
+								{
+									cout << mapCS[i];
+								}
+							}
+						}
+						else
+						{
+							std::cout << "есть цикл" << std::endl;
+						}
+						break;
+					}
+					case 3:
+					{
+						cout << gasNetwork;
+						break;
+					}
+
+					case 4:
+					{
+						gasNetwork.DeleteVertex(tryInput("Введите  id КС, которую хотите удалить: ", mapCS));
+						break;
+					}
+					case 5:
+					{
+						gasNetwork.DeleteEdge(tryInput("Введите id трубы, котрую хотите удалить: ", mapPipe));
+						break;
+					}
+
+					case 6:
+					{
+						int IdS = 0, IdT = 0;
+						IdS = tryInput("Please, enter source compressor station id ([0] - leave) : ", mapCS);
+						if (IdS != 0)
+						{
+							IdT = tryInput("Please, enter target compresor station id ([0] - leave) : ", mapCS);
+							if (IdT != 0)
+							{
+								cout << "Максимальный поток: " << gasNetwork.MaxFlow(IdS, IdT) << endl;
+							}
+						}
+						break;
+					}
+					case 7:
+					{
+						int IdS = 0, IdF = 0;
+						IdS = tryInput("Введите начальный id КС или ([0] - чтобы выйти) : ", mapCS);
+						if (IdS != 0)
+						{
+							IdF = tryInput("Введите id последней КС или ([0] - чтобы выйти) : ", mapCS);
+							if (IdF != 0)
+							{
+								double path = gasNetwork.MinPath(IdS, IdF);
+								if (path != 0)
+								{
+									cout << "Кратчайший путь: " << path << endl;
+								}
+								else
+								{
+									cout << "Нет ути" << endl;
+								}
+							}
+						}
+					}
+					break;
+					case 0:
+						editingNet = false;
+						break;
+					default:
+						cout << "Действие недоступно " << endl;
+						break;
+					}
+				}
+			}
+			else
+			{
+				cout << "Добавьте КС и трубу " << endl;
+			}
 		}
-		if (variant != 0)
-			system("pause");
-	} while (variant != 0);
+		break;
+
+		default:
+			cout << "Команды не существует" << endl;
+			break;
+		}
+
+
+
+			if (variant != 0)
+				system("pause");
+		}
+	
+	while (variant != 0);
+
     return 0;
 	}
 
